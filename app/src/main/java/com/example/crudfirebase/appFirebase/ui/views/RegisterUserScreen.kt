@@ -3,13 +3,21 @@ package com.example.crudfirebase.appFirebase.ui.views
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -42,101 +50,114 @@ import com.example.crudfirebase.ui.theme.color_write
 fun RegisterUserScreen(navController: NavHostController) {
 
     val viewModel: AuthViewModel = hiltViewModel()
-
     val state = viewModel.state.value
-
     var showDialog = remember { mutableStateOf(false) }
-
     var email = remember { mutableStateOf("") }
     var password = remember { mutableStateOf("") }
 
-    // 👉 SUCCESS TRIGGER
+
     LaunchedEffect(state) {
         if (state is UiState.Success) {
             showDialog.value = true
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-
-        Scaffold(
-            modifier = Modifier.fillMaxSize()
-        ) { innerPadding ->
-
+    Scaffold(
+        topBar = {
             Box(
                 modifier = Modifier
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .padding(16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.CenterStart)
+                        .clickable {
+                            navController.popBackStack()
+                        }
+                )
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color_write)
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Column(
+                modifier = Modifier
                     .fillMaxSize()
-                    .background(color_write)
-                    .padding(innerPadding),
-                contentAlignment = Alignment.Center
+                    .padding(horizontal = 40.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 40.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+                Text(
+                    text = "Registro",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
 
-                    Text(
-                        text = "Registro",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                Spacer(Modifier.height(24.dp))
 
-                    Spacer(Modifier.height(24.dp))
+                EmailInputField(
+                    value = email.value,
+                    onValueChange = { email.value = it },
+                    placeholder = "Correo"
+                )
 
-                    EmailInputField(
-                        value = email.value,
-                        onValueChange = { email.value = it },
-                        placeholder = "Correo"
-                    )
+                Spacer(Modifier.height(16.dp))
 
-                    Spacer(Modifier.height(16.dp))
+                PasswordInputField(
+                    value = password.value,
+                    onValueChange = { password.value = it },
+                    placeholder = "Contraseña"
+                )
 
-                    PasswordInputField(
-                        value = password.value,
-                        onValueChange = { password.value = it },
-                        placeholder = "Contraseña"
-                    )
+                Spacer(Modifier.height(35.dp))
 
-                    Spacer(Modifier.height(35.dp))
-
-                    SlideToConfirmButton(
-                        text = "Registrar",
-                        enabled = email.value.isNotEmpty() && password.value.isNotEmpty(),
-                        onComplete = {
-                            viewModel.registerUser(email.value, password.value)
-                        }
-                    )
-
-                    Spacer(Modifier.height(20.dp))
-
-                    if (state is UiState.Error) {
-                        Text(
-                            text = state.message,
-                            color = Color.Red
-                        )
+                SlideToConfirmButton(
+                    text = "Registrar",
+                    enabled = email.value.isNotEmpty() && password.value.isNotEmpty(),
+                    onComplete = {
+                        viewModel.registerUser(email.value, password.value)
                     }
+                )
+
+                Spacer(Modifier.height(20.dp))
+
+                if (state is UiState.Error) {
+                    Text(
+                        text = state.message,
+                        color = Color.Red
+                    )
                 }
             }
         }
-
-        if (state is UiState.Loading) {
-            LoadingScreen()
-        }
-
-        CustomAlertDialog(
-            show = showDialog.value,
-            title = "Registro exitoso",
-            subtitle = "Usuario creado correctamente\n${email.value}",
-            buttonText = "Aceptar",
-            onDismiss = {
-                showDialog.value = false
-                navController.navigate(Screen.HomeScreen.route)
-            },
-            onConfirm = {}
-        )
     }
+
+    if (state is UiState.Loading) {
+        LoadingScreen()
+    }
+
+    CustomAlertDialog(
+        show = showDialog.value,
+        title = "Registro exitoso",
+        subtitle = "Usuario creado correctamente\n${email.value}",
+        buttonText = "Aceptar",
+        onDismiss = {
+            showDialog.value = false
+            navController.navigate(Screen.HomeScreen.route)
+        },
+        onConfirm = {}
+    )
 }
