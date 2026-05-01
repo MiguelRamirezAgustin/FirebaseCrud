@@ -15,6 +15,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,46 +28,39 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.crudfirebase.appFirebase.data.remote.FirebaseAuthService
 import com.example.crudfirebase.appFirebase.data.repository.AuthRepository
+import com.example.crudfirebase.appFirebase.navigation.Screen
+import com.example.crudfirebase.appFirebase.ui.components.CustomAlertDialog
 import com.example.crudfirebase.appFirebase.ui.components.EmailInputField
 import com.example.crudfirebase.appFirebase.ui.components.PasswordInputField
 import com.example.crudfirebase.appFirebase.ui.components.SlideToConfirmButton
 import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
+import com.example.crudfirebase.appFirebase.viewmodel.UiState
 import com.example.crudfirebase.ui.theme.color_write
+
 
 @Composable
 fun RegisterUserScreen(navController: NavHostController) {
+
     val viewModel: AuthViewModel = hiltViewModel()
 
-    val user = viewModel.user.value
-    val isLoading = viewModel.isLoading.value
-    val error = viewModel.error.value
-    var emailRegisterUser = remember { mutableStateOf("") }
-    var passwordRegisterUser = remember { mutableStateOf("") }
+    val state = viewModel.state.value
 
+    var showDialog = remember { mutableStateOf(false) }
 
-    LaunchedEffect(user) {
-        if (user != null) {
-            Log.d("", " Register user")
-            //Navegacion a pantalla de inicio
+    var email = remember { mutableStateOf("") }
+    var password = remember { mutableStateOf("") }
+
+    // 👉 SUCCESS TRIGGER
+    LaunchedEffect(state) {
+        if (state is UiState.Success) {
+            showDialog.value = true
         }
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.White
-    ) {
-        if (isLoading) {
-            LoadingScreen()
-        }
+    Box(modifier = Modifier.fillMaxSize()) {
+
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-
-            },
-            bottomBar = {
-
-            }
-
+            modifier = Modifier.fillMaxSize()
         ) { innerPadding ->
 
             Box(
@@ -76,6 +70,7 @@ fun RegisterUserScreen(navController: NavHostController) {
                     .padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) {
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -86,51 +81,62 @@ fun RegisterUserScreen(navController: NavHostController) {
 
                     Text(
                         text = "Registro",
-                        color = Color.Black,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )
+
                     Spacer(Modifier.height(24.dp))
+
                     EmailInputField(
-                        value = emailRegisterUser.value,
-                        onValueChange = { emailRegisterUser.value = it },
-                        placeholder = "Correo electronico",
-                        isFocused = false,
-                        isError = false
+                        value = email.value,
+                        onValueChange = { email.value = it },
+                        placeholder = "Correo"
                     )
 
                     Spacer(Modifier.height(16.dp))
+
                     PasswordInputField(
-                        value = passwordRegisterUser.value,
-                        onValueChange = { passwordRegisterUser.value = it },
-                        placeholder = "Contraseña",
+                        value = password.value,
+                        onValueChange = { password.value = it },
+                        placeholder = "Contraseña"
                     )
 
+                    Spacer(Modifier.height(35.dp))
 
-                    Spacer(Modifier.height(35.dp))
-                    SlideToConfirmButton(text = "Aceptar", enabled = !isLoading, onComplete = {
-                        if (emailRegisterUser.value.isNotEmpty() && passwordRegisterUser.value.isNotEmpty()) {
-                            viewModel.registerUser(
-                                emailRegisterUser.value,
-                                passwordRegisterUser.value
-                            )
-                        } else {
-                            Log.e("LOGIN", "Campos vacíos")
+                    SlideToConfirmButton(
+                        text = "Registrar",
+                        enabled = email.value.isNotEmpty() && password.value.isNotEmpty(),
+                        onComplete = {
+                            viewModel.registerUser(email.value, password.value)
                         }
-                    })
-                    Spacer(Modifier.height(35.dp))
-                    error?.let {
+                    )
+
+                    Spacer(Modifier.height(20.dp))
+
+                    if (state is UiState.Error) {
                         Text(
-                            text = it,
-                            color = Color.Red,
-                            fontSize = 14.sp
+                            text = state.message,
+                            color = Color.Red
                         )
                     }
                 }
             }
-            if (isLoading) {
-                LoadingScreen()
-            }
         }
+
+        if (state is UiState.Loading) {
+            LoadingScreen()
+        }
+
+        CustomAlertDialog(
+            show = showDialog.value,
+            title = "Registro exitoso",
+            subtitle = "Usuario creado correctamente\n${email.value}",
+            buttonText = "Aceptar",
+            onDismiss = {
+                showDialog.value = false
+                navController.navigate(Screen.HomeScreen.route)
+            },
+            onConfirm = {}
+        )
     }
 }

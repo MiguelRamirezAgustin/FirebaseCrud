@@ -1,10 +1,11 @@
 package com.example.crudfirebase.appFirebase.ui.components
 
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,89 +31,105 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.crudfirebase.ui.theme.color_blue
-import com.example.crudfirebase.ui.theme.color_write
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun SlideToConfirmButton(
-    text: String = "SAVE",
+    text: String = "CONTINUAR",
     enabled: Boolean = true,
     onComplete: () -> Unit
 ) {
 
     val maxWidthPx = remember { mutableStateOf(0f) }
-    val offsetX = remember { mutableStateOf(0f) }
-
-    val thumbSize = 56.dp
     val density = LocalDensity.current
 
+    val thumbSize = 56.dp
+
+    val offsetX = remember { mutableStateOf(0f) }
+    val showThumb = remember { mutableStateOf(false) }
+    val isAnimating = remember { mutableStateOf(false) }
 
     val animatedOffset = animateFloatAsState(
         targetValue = offsetX.value,
+        animationSpec = tween(
+            durationMillis = 600,
+            easing = FastOutSlowInEasing
+        ),
         label = ""
     )
+
+    fun startAnimation() {
+        if (isAnimating.value || !enabled) return
+
+        isAnimating.value = true
+        showThumb.value = true
+
+        val maxOffset =
+            maxWidthPx.value - with(density) { thumbSize.toPx() }
+
+        kotlinx.coroutines.MainScope().launch {
+            delay(150)
+            offsetX.value = maxOffset
+            delay(750)
+            onComplete()
+            offsetX.value = 0f
+            showThumb.value = false
+            isAnimating.value = false
+        }
+    }
+
+    val backgroundColor = if (enabled) color_blue else Color.White
+    val borderColor = if (enabled) Color.Transparent else color_blue
+    val textColor = if (enabled) Color.White else Color.Black
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .height(60.dp)
             .clip(RoundedCornerShape(50))
-            .background(
-                if (enabled) color_blue else Color.Gray
+            .background(backgroundColor)
+            .border(
+                width = 2.dp,
+                color = borderColor,
+                shape = RoundedCornerShape(50)
             )
             .onGloballyPositioned {
                 maxWidthPx.value = it.size.width.toFloat()
+            }
+            .clickable(enabled = enabled && !isAnimating.value) {
+                startAnimation()
             }
     ) {
 
         Text(
             text = text,
-            color = color_write,
+            color = textColor,
             fontSize = 16.sp,
-            modifier = Modifier.align(Alignment.Center),
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.align(Alignment.Center)
         )
 
-        Box(
-            modifier = Modifier
-                .offset {
-                    IntOffset(animatedOffset.value.toInt(), 0)
-                }
-                .size(thumbSize)
-                .clip(CircleShape)
-                .background(Color.White)
-                .align(Alignment.CenterStart)
-                .draggable(
-                    enabled = enabled,
-                    orientation = Orientation.Horizontal,
-                    state = rememberDraggableState { delta ->
+        if (showThumb.value) {
 
-                        val maxOffset =
-                            maxWidthPx.value - with(density) { thumbSize.toPx() }
-
-                        offsetX.value = (offsetX.value + delta)
-                            .coerceIn(0f, maxOffset)
-                    },
-                    onDragStopped = {
-                        val maxOffset =
-                            maxWidthPx.value - with(density) { thumbSize.toPx() }
-                        if (offsetX.value > maxOffset * 0.8f) {
-                            offsetX.value = maxOffset
-                            onComplete()
-                            offsetX.value = 0f
-
-                        } else {
-                            offsetX.value = 0f
-                        }
+            Box(
+                modifier = Modifier
+                    .offset {
+                        IntOffset(animatedOffset.value.toInt(), 0)
                     }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowForward,
-                contentDescription = null,
-                tint = color_blue
-            )
+                    .size(56.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
+                    .align(Alignment.CenterStart),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowForward,
+                    contentDescription = null,
+                    tint = color_blue
+                )
+            }
         }
     }
 }

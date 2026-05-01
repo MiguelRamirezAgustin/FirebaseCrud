@@ -7,45 +7,38 @@ import com.example.crudfirebase.appFirebase.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
-    var user = mutableStateOf<UserModel?>(null)
-    var error = mutableStateOf<String?>(null)
-    var isLoading = mutableStateOf(false)
 
-    /**Login ViewModel**/
+    var state = mutableStateOf<UiState>(UiState.Idle)
+
+    /** Login **/
     fun login(email: String, password: String) {
-        isLoading.value = true
-        repository.login(email, password) { result, errorMsg ->
-            isLoading.value = false
+        state.value = UiState.Loading
 
-            if (result != null) {
-                user.value = result
+        repository.login(email, password) { result, errorMsg ->
+
+            state.value = if (result != null) {
+                UiState.Success(result)
             } else {
-                error.value = errorMsg
+                UiState.Error(errorMsg ?: "Error desconocido")
             }
         }
     }
 
-    /**Register ViewModel**/
-
-    fun registerUser(email: String, password: String){
-        isLoading.value = true
-        error.value = null
-        user.value = null
+    /** Register **/
+    fun registerUser(email: String, password: String) {
+        state.value = UiState.Loading
 
         repository.register(email, password) { result, errorMsg ->
-            isLoading.value = false
-            if (result != null) {
-                user.value = result
+
+            state.value = if (result != null) {
+                UiState.Success(result)
             } else {
-                error.value = errorMsg
+                UiState.Error(errorMsg ?: "Error desconocido")
             }
         }
     }
-
-
 }

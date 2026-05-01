@@ -34,27 +34,20 @@ class FirebaseAuthService {
     ) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
+
                 val firebaseUser = result.user
 
-                if (firebaseUser != null) {
+                val user = UserModel(
+                    uid = firebaseUser!!.uid,
+                    email = firebaseUser.email ?: ""
+                )
 
-                    val user = UserModel(
-                        uid = firebaseUser.uid,
-                        email = firebaseUser.email ?: ""
-                    )
-                      /***Almacenar usuario*/
-                    FirebaseFirestore.getInstance()
-                        .collection("users")
-                        .document(user.uid)
-                        .set(user)
-                        .addOnSuccessListener {
-                            onResult(user, null)
-                        }
-                        .addOnFailureListener {
-                            onResult(null, it.message)
-                        }
+                onResult(user, null)
 
-                }
+                FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(user.uid)
+                    .set(user)
             }
             .addOnFailureListener {
                 onResult(null, it.message)

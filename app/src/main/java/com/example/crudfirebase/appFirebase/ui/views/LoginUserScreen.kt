@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,12 +21,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.crudfirebase.R
 import com.example.crudfirebase.appFirebase.data.remote.FirebaseAuthService
 import com.example.crudfirebase.appFirebase.data.repository.AuthRepository
 import com.example.crudfirebase.appFirebase.navigation.Screen
@@ -71,6 +77,22 @@ fun LoginUserScreen(navController: NavHostController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.iconfirebase),
+                            contentDescription = "firebase icon",
+                            modifier = Modifier.size(65.dp),
+                            tint = Color.Unspecified
+                        )
+                    }
+                    Spacer(Modifier.height(15.dp))
+
                     Text(
                         text = "Login",
                         color = Color.Black,
@@ -111,17 +133,7 @@ fun LoginUserScreen(navController: NavHostController) {
                         }
                     )
 
-                    if (viewModel.isLoading.value) {
-                        Text("Cargando...")
-                    }
 
-                    viewModel.user.value?.let {
-                        Text("Bienvenido ${it.email}")
-                    }
-
-                    viewModel.error.value?.let {
-                        Text("Error: $it")
-                    }
                 }
 
             }
