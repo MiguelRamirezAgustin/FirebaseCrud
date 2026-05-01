@@ -4,17 +4,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.crudfirebase.appFirebase.data.model.UserModel
 import com.example.crudfirebase.appFirebase.data.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AuthViewModel(
+
+@HiltViewModel
+class AuthViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
     var user = mutableStateOf<UserModel?>(null)
     var error = mutableStateOf<String?>(null)
     var isLoading = mutableStateOf(false)
 
+    /**Login ViewModel**/
     fun login(email: String, password: String) {
         isLoading.value = true
-
         repository.login(email, password) { result, errorMsg ->
             isLoading.value = false
 
@@ -25,4 +29,23 @@ class AuthViewModel(
             }
         }
     }
+
+    /**Register ViewModel**/
+
+    fun registerUser(email: String, password: String){
+        isLoading.value = true
+        error.value = null
+        user.value = null
+
+        repository.register(email, password) { result, errorMsg ->
+            isLoading.value = false
+            if (result != null) {
+                user.value = result
+            } else {
+                error.value = errorMsg
+            }
+        }
+    }
+
+
 }

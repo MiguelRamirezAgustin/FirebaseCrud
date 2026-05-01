@@ -1,5 +1,6 @@
 package com.example.crudfirebase.appFirebase.ui.components
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -29,26 +30,36 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.crudfirebase.ui.theme.color_blue
-import com.example.crudfirebase.ui.theme.color_red
 import com.example.crudfirebase.ui.theme.color_write
+
 
 @Composable
 fun SlideToConfirmButton(
     text: String = "SAVE",
+    enabled: Boolean = true,
     onComplete: () -> Unit
 ) {
+
     val maxWidthPx = remember { mutableStateOf(0f) }
     val offsetX = remember { mutableStateOf(0f) }
 
     val thumbSize = 56.dp
     val density = LocalDensity.current
 
+
+    val animatedOffset = animateFloatAsState(
+        targetValue = offsetX.value,
+        label = ""
+    )
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp)
             .clip(RoundedCornerShape(50))
-            .background(color_blue)
+            .background(
+                if (enabled) color_blue else Color.Gray
+            )
             .onGloballyPositioned {
                 maxWidthPx.value = it.size.width.toFloat()
             }
@@ -65,26 +76,31 @@ fun SlideToConfirmButton(
         Box(
             modifier = Modifier
                 .offset {
-                    IntOffset(offsetX.value.toInt(), 0)
+                    IntOffset(animatedOffset.value.toInt(), 0)
                 }
                 .size(thumbSize)
                 .clip(CircleShape)
                 .background(Color.White)
                 .align(Alignment.CenterStart)
                 .draggable(
+                    enabled = enabled,
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta ->
-                        val maxOffset = maxWidthPx.value - with(density) { thumbSize.toPx() }
+
+                        val maxOffset =
+                            maxWidthPx.value - with(density) { thumbSize.toPx() }
 
                         offsetX.value = (offsetX.value + delta)
                             .coerceIn(0f, maxOffset)
                     },
                     onDragStopped = {
-                        val maxOffset = maxWidthPx.value - with(density) { thumbSize.toPx() }
-
+                        val maxOffset =
+                            maxWidthPx.value - with(density) { thumbSize.toPx() }
                         if (offsetX.value > maxOffset * 0.8f) {
                             offsetX.value = maxOffset
                             onComplete()
+                            offsetX.value = 0f
+
                         } else {
                             offsetX.value = 0f
                         }

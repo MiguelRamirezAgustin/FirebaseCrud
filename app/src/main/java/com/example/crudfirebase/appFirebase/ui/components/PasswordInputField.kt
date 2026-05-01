@@ -25,11 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.crudfirebase.R
 import com.example.crudfirebase.ui.theme.color_black
 import com.example.crudfirebase.ui.theme.color_blue
 import com.example.crudfirebase.ui.theme.color_red
@@ -55,7 +58,7 @@ fun PasswordInputField(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .border(2.dp, borderColor, RoundedCornerShape(16.dp))
+            .border(1.dp, borderColor, RoundedCornerShape(16.dp))
             .background(color_write)
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -81,6 +84,7 @@ fun PasswordInputField(
             singleLine = true,
             textStyle = TextStyle(
                 color = Color.DarkGray,
+                textDecoration = TextDecoration.None,
                 fontSize = 16.sp
             ),
             visualTransformation = if (isVisible.value) {
@@ -101,10 +105,12 @@ fun PasswordInputField(
 
 
         Icon(
-            imageVector = if (isVisible.value)
-                Icons.Default.Check
-            else
-                Icons.Default.KeyboardArrowUp,
+            painter = painterResource(
+                id = if (isVisible.value)
+                    R.drawable.visibility
+                else
+                    R.drawable.eye
+            ),
             contentDescription = "toggle password",
             tint = Color.Gray,
             modifier = Modifier

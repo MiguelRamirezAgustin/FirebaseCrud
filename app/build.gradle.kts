@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.hilt.android)
+    id("org.jetbrains.kotlin.kapt")
+
 }
 
 android {
@@ -41,6 +44,7 @@ android {
         kotlinCompilerExtensionVersion = "1.5.14"
     }
 
+
 }
 
 dependencies {
@@ -60,9 +64,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.gms:google-services:4.4.4")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
+    // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    // Fix JavaPoet
+}
+
+kapt {
+    correctErrorTypes = true
 }

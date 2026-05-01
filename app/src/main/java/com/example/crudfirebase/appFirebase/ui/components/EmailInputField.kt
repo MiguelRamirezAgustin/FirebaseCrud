@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.crudfirebase.ui.theme.color_black
@@ -49,7 +50,7 @@ fun EmailInputField(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .border(2.dp, borderColor, RoundedCornerShape(16.dp))
+            .border(1.dp, borderColor, RoundedCornerShape(16.dp))
             .background(color_write)
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -70,6 +71,7 @@ fun EmailInputField(
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             textStyle = TextStyle(
+                textDecoration = TextDecoration.None,
                 color = Color.DarkGray,
                 fontSize = 16.sp
             ),

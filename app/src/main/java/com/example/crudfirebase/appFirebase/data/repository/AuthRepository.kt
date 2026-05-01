@@ -5,12 +5,19 @@ import com.example.crudfirebase.appFirebase.data.remote.FirebaseAuthService
 
 class AuthRepository(private val service: FirebaseAuthService) {
 
+
+    /**
+     * Fun para Login usuario
+     * **/
     fun login(email:String,
               password:String,
               onResul:(UserModel?, String?) -> Unit){
         service.loginUser(email, password, onResul)
     }
 
+    /**
+     * Fun para registar usuario
+     * **/
     fun register(
         email: String,
         password: String,
