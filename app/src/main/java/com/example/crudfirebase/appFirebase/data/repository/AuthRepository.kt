@@ -21,8 +21,9 @@ class AuthRepository(private val service: FirebaseAuthService) {
     fun register(
         email: String,
         password: String,
+        name: String,
         onResult: (UserModel?, String?) -> Unit
     ) {
-        service.registerUser(email, password, onResult)
+        service.registerUser(email, password, name,onResult)
     }
 }

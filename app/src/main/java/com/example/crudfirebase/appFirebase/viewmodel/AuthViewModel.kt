@@ -12,7 +12,8 @@ class AuthViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 
-    var state = mutableStateOf<UiState>(UiState.Idle)
+    private val _state = mutableStateOf<UiState>(UiState.Idle)
+    val state = _state
 
     /** Login **/
     fun login(email: String, password: String) {
@@ -29,10 +30,10 @@ class AuthViewModel @Inject constructor(
     }
 
     /** Register **/
-    fun registerUser(email: String, password: String) {
+    fun registerUser(email: String, password: String,name:String,) {
         state.value = UiState.Loading
 
-        repository.register(email, password) { result, errorMsg ->
+        repository.register(email, password ,name) { result, errorMsg ->
 
             state.value = if (result != null) {
                 UiState.Success(result)

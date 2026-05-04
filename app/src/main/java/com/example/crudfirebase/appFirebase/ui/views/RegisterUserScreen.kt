@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -39,6 +40,7 @@ import com.example.crudfirebase.appFirebase.data.repository.AuthRepository
 import com.example.crudfirebase.appFirebase.navigation.Screen
 import com.example.crudfirebase.appFirebase.ui.components.CustomAlertDialog
 import com.example.crudfirebase.appFirebase.ui.components.EmailInputField
+import com.example.crudfirebase.appFirebase.ui.components.GenericInputField
 import com.example.crudfirebase.appFirebase.ui.components.PasswordInputField
 import com.example.crudfirebase.appFirebase.ui.components.SlideToConfirmButton
 import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
@@ -53,6 +55,7 @@ fun RegisterUserScreen(navController: NavHostController) {
     val state = viewModel.state.value
     var showDialog = remember { mutableStateOf(false) }
     var email = remember { mutableStateOf("") }
+    var nameUser = remember { mutableStateOf("") }
     var password = remember { mutableStateOf("") }
 
 
@@ -108,7 +111,16 @@ fun RegisterUserScreen(navController: NavHostController) {
                 )
 
                 Spacer(Modifier.height(24.dp))
+                GenericInputField(
+                    isIcon = Icons.Default.Person,
+                    value = nameUser.value,
+                    onValueChange = { nameUser.value = it },
+                    placeholder = "Nombre completo",
+                    isFocused = false,
+                    isError = false
+                )
 
+                Spacer(Modifier.height(24.dp))
                 EmailInputField(
                     value = email.value,
                     onValueChange = { email.value = it },
@@ -116,7 +128,6 @@ fun RegisterUserScreen(navController: NavHostController) {
                 )
 
                 Spacer(Modifier.height(16.dp))
-
                 PasswordInputField(
                     value = password.value,
                     onValueChange = { password.value = it },
@@ -129,7 +140,7 @@ fun RegisterUserScreen(navController: NavHostController) {
                     text = "Registrar",
                     enabled = email.value.isNotEmpty() && password.value.isNotEmpty(),
                     onComplete = {
-                        viewModel.registerUser(email.value, password.value)
+                        viewModel.registerUser(email.value, password.value,nameUser.value)
                     }
                 )
 
@@ -145,9 +156,9 @@ fun RegisterUserScreen(navController: NavHostController) {
         }
     }
 
-    if (state is UiState.Loading) {
+    /*if (state is UiState.Loading) {
         LoadingScreen()
-    }
+    }*/
 
     CustomAlertDialog(
         show = showDialog.value,
