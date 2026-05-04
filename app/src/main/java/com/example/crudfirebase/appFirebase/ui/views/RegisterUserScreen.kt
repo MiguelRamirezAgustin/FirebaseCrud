@@ -37,8 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.crudfirebase.R
-import com.example.crudfirebase.appFirebase.data.remote.FirebaseAuthService
-import com.example.crudfirebase.appFirebase.data.repository.AuthRepository
 import com.example.crudfirebase.appFirebase.navigation.Screen
 import com.example.crudfirebase.appFirebase.ui.components.CustomAlertDialog
 import com.example.crudfirebase.appFirebase.ui.components.EmailInputField
@@ -60,6 +58,25 @@ fun RegisterUserScreen(navController: NavHostController) {
     var nameUser = remember { mutableStateOf("") }
     var password = remember { mutableStateOf("") }
 
+    fun hasUpperCase(password: String): Boolean {
+        return password.any { it.isUpperCase() }
+    }
+
+    fun hasLowerCase(password: String): Boolean {
+        return password.any { it.isLowerCase() }
+    }
+
+    fun hasNumber(password: String): Boolean {
+        return password.any { it.isDigit() }
+    }
+
+    fun hasSymbol(password: String): Boolean {
+        return password.any { !it.isLetterOrDigit() }
+    }
+
+    fun hasMinLength(password: String): Boolean {
+        return password.length >= 8
+    }
 
     LaunchedEffect(state) {
         if (state is UiState.Success) {
@@ -135,9 +152,40 @@ fun RegisterUserScreen(navController: NavHostController) {
                     onValueChange = { password.value = it },
                     placeholder = stringResource(id = R.string.text_password)
                 )
+                if (password.value.isNotEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
+                    ) {
+                        PasswordRequirement(
+                            text = "Una letra mayúscula",
+                            isValid = hasUpperCase(password.value)
+                        )
+
+                        PasswordRequirement(
+                            text = "Una letra minúscula",
+                            isValid = hasLowerCase(password.value)
+                        )
+
+                        PasswordRequirement(
+                            text = "Un número",
+                            isValid = hasNumber(password.value)
+                        )
+
+                        PasswordRequirement(
+                            text = "Un símbolo",
+                            isValid = hasSymbol(password.value)
+                        )
+
+                        PasswordRequirement(
+                            text = "Mínimo 8 caracteres",
+                            isValid = hasMinLength(password.value)
+                        )
+                    }
+                }
 
                 Spacer(Modifier.height(35.dp))
-
                 SlideToConfirmButton(
                     text = stringResource(id = R.string.text_register_user_screen),
                     enabled = email.value.isNotEmpty() && password.value.isNotEmpty(),
@@ -172,5 +220,21 @@ fun RegisterUserScreen(navController: NavHostController) {
             navController.navigate(Screen.HomeScreen.route)
         },
         onConfirm = {}
+    )
+}
+
+
+
+/**fun to validate password**/
+@Composable
+fun PasswordRequirement(
+    text: String,
+    isValid: Boolean
+) {
+    Text(
+        text = if (isValid) "✔ $text" else "✘ $text",
+        color = if (isValid) Color(0xFF4CAF50) else Color.Red,
+        fontSize = 12.sp,
+        modifier = Modifier.padding(vertical = 2.dp, horizontal = 18.dp)
     )
 }
