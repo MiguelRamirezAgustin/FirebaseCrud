@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,10 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.crudfirebase.ui.theme.color_black
 import com.example.crudfirebase.ui.theme.color_blue
-import com.example.crudfirebase.ui.theme.color_red
 import com.example.crudfirebase.ui.theme.color_write
 
-
+/**input email**/
 @Composable
 fun EmailInputField(
     value: String,

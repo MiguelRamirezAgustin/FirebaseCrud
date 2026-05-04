@@ -30,10 +30,10 @@ class AuthViewModel @Inject constructor(
     }
 
     /** Register **/
-    fun registerUser(email: String, password: String,name:String,) {
+    fun registerUser(email: String, password: String,name:String, phone:String, gender:String, birthdate:String ) {
         state.value = UiState.Loading
 
-        repository.register(email, password ,name) { result, errorMsg ->
+        repository.register(email, password ,name, phone, gender, birthdate ) { result, errorMsg ->
 
             state.value = if (result != null) {
                 UiState.Success(result)

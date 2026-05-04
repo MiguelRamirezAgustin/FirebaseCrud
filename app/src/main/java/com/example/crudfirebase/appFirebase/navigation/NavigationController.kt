@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.crudfirebase.appFirebase.ui.views.EditProfileUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.HomeScreen
 import com.example.crudfirebase.appFirebase.ui.views.LoginUserScreen
+import com.example.crudfirebase.appFirebase.ui.views.ProfileUserScreenInfo
 import com.example.crudfirebase.appFirebase.ui.views.RegisterUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.SplashScreen
 
@@ -31,6 +33,12 @@ fun NavigationController() {
         }
         composable(Screen.HomeScreen.route) {
             HomeScreen(navController)
+        }
+        composable(Screen.EditProfileUserScreen.route) {
+            EditProfileUserScreen(navController)
+        }
+        composable(Screen.ProfileUserScreenInfo.route) {
+            ProfileUserScreenInfo(navController)
         }
     }
 }

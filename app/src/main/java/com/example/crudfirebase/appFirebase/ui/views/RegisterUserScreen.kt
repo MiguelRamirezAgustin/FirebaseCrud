@@ -1,12 +1,13 @@
 package com.example.crudfirebase.appFirebase.ui.views
 
 
-import android.util.Log
+import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,17 +15,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,6 +36,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,19 +47,29 @@ import com.example.crudfirebase.appFirebase.navigation.Screen
 import com.example.crudfirebase.appFirebase.ui.components.CustomAlertDialog
 import com.example.crudfirebase.appFirebase.ui.components.EmailInputField
 import com.example.crudfirebase.appFirebase.ui.components.GenericInputField
+import com.example.crudfirebase.appFirebase.ui.components.InputFieldGeneric
 import com.example.crudfirebase.appFirebase.ui.components.PasswordInputField
 import com.example.crudfirebase.appFirebase.ui.components.SlideToConfirmButton
 import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
 import com.example.crudfirebase.appFirebase.viewmodel.UiState
 import com.example.crudfirebase.ui.theme.color_write
+import androidx.compose.material3.*
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterUserScreen(navController: NavHostController) {
 
     val viewModel: AuthViewModel = hiltViewModel()
     val state = viewModel.state.value
     var showDialog = remember { mutableStateOf(false) }
+    var showDatePicker = remember { mutableStateOf(false) }
+    var phone = remember { mutableStateOf("") }
+    var gender = remember { mutableStateOf("") }
+    var birthdate = remember { mutableStateOf("") }
     var email = remember { mutableStateOf("") }
     var nameUser = remember { mutableStateOf("") }
     var password = remember { mutableStateOf("") }
@@ -129,7 +145,7 @@ fun RegisterUserScreen(navController: NavHostController) {
                     fontWeight = FontWeight.Bold
                 )
 
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(16.dp))
                 GenericInputField(
                     isIcon = Icons.Default.Person,
                     value = nameUser.value,
@@ -138,14 +154,36 @@ fun RegisterUserScreen(navController: NavHostController) {
                     isFocused = false,
                     isError = false
                 )
-
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(16.dp))
+                InputFieldGeneric(
+                    typeKeyboardType = KeyboardType.Phone,
+                    icon = Icons.Default.Phone,
+                    value = phone.value,
+                    onValueChange = { phone.value = it },
+                    placeholder = stringResource(id = R.string.text_phone),
+                    isFocused = false,
+                    isError = false
+                )
+                Spacer(Modifier.height(16.dp))
+                InputFieldGeneric(
+                    typeKeyboardType = KeyboardType.Text,
+                    icon = Icons.Default.DateRange,
+                    value = birthdate.value,
+                    onValueChange = {
+                        birthdate.value = it
+                    },
+                    placeholder = stringResource(id = R.string.text_birthdate),
+                    isReadOnly = true,
+                    onClick = {
+                        showDatePicker.value = true
+                    }
+                )
+                Spacer(Modifier.height(16.dp))
                 EmailInputField(
                     value = email.value,
                     onValueChange = { email.value = it },
                     placeholder = stringResource(id = R.string.text_email_user)
                 )
-
                 Spacer(Modifier.height(16.dp))
                 PasswordInputField(
                     value = password.value,
@@ -184,16 +222,67 @@ fun RegisterUserScreen(navController: NavHostController) {
                         )
                     }
                 }
-
-                Spacer(Modifier.height(35.dp))
+                Spacer(Modifier.height(16.dp))
+                Column {
+                    getGender(gender)
+                }
+                Spacer(Modifier.height(16.dp))
                 SlideToConfirmButton(
                     text = stringResource(id = R.string.text_register_user_screen),
-                    enabled = email.value.isNotEmpty() && password.value.isNotEmpty(),
+                    enabled = email.value.isNotEmpty() && password.value.isNotEmpty() && gender.value.isNotEmpty() && phone.value.isNotEmpty()&& birthdate.value.isNotEmpty(),
                     onComplete = {
-                        viewModel.registerUser(email.value, password.value,nameUser.value)
+                        viewModel.registerUser(
+                           email= email.value,
+                            password = password.value,
+                            name = nameUser.value,
+                            phone = phone.value,
+                            gender = gender.value,
+                            birthdate = birthdate.value,
+                        )
                     }
                 )
 
+                if (showDatePicker.value) {
+
+                    val datePickerState = rememberDatePickerState()
+
+                    DatePickerDialog(
+                        onDismissRequest = {
+                            showDatePicker.value = false
+                        },
+                        confirmButton = {
+
+                            Text(
+                                text = "Aceptar",
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 24.sp,
+                                modifier = Modifier
+                                    .padding(end = 20.dp, bottom = 15.dp)
+                                    .clickable {
+
+                                        val millis =
+                                            datePickerState.selectedDateMillis
+
+                                        birthdate.value =
+                                            millis?.let {
+                                                SimpleDateFormat(
+                                                        "dd/MM/yyyy",
+                                                        Locale.getDefault()
+                                                    )
+                                                    .format(Date(it))
+                                            } ?: ""
+
+                                        showDatePicker.value = false
+                                    }
+                            )
+                        }
+                    ) {
+
+                        DatePicker(
+                            state = datePickerState
+                        )
+                    }
+                }
                 Spacer(Modifier.height(20.dp))
 
                 if (state is UiState.Error) {
@@ -202,6 +291,7 @@ fun RegisterUserScreen(navController: NavHostController) {
                         color = Color.Red
                     )
                 }
+
             }
         }
     }
@@ -224,7 +314,6 @@ fun RegisterUserScreen(navController: NavHostController) {
 }
 
 
-
 /**fun to validate password**/
 @Composable
 fun PasswordRequirement(
@@ -237,4 +326,48 @@ fun PasswordRequirement(
         fontSize = 12.sp,
         modifier = Modifier.padding(vertical = 2.dp, horizontal = 18.dp)
     )
+}
+
+
+@Composable
+fun getGender(gender: MutableState<String>) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            modifier = Modifier.padding(start = 8.dp),
+            text = "Genero:",
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Start
+        )
+        Row(
+            modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            RadioButton(
+                selected = gender.value == "Hombre",
+                onClick = {
+                    gender.value = "Hombre"
+                }
+            )
+            Text(
+                "Hombre",
+                fontWeight = FontWeight.Medium
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            RadioButton(
+                selected = gender.value == "Mujer",
+                onClick = {
+                    gender.value = "Mujer"
+                }
+            )
+
+            Text(
+                "Mujer",
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+
 }

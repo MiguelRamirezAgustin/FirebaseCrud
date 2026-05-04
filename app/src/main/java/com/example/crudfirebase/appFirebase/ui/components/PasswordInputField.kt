@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -35,7 +33,6 @@ import androidx.compose.ui.unit.sp
 import com.example.crudfirebase.R
 import com.example.crudfirebase.ui.theme.color_black
 import com.example.crudfirebase.ui.theme.color_blue
-import com.example.crudfirebase.ui.theme.color_red
 import com.example.crudfirebase.ui.theme.color_write
 
 @Composable

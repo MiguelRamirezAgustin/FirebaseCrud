@@ -1,6 +1,5 @@
 package com.example.crudfirebase.appFirebase.data.remote
 
-import android.util.Log
 import com.example.crudfirebase.appFirebase.data.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,6 +39,9 @@ class FirebaseAuthService {
         email: String,
         password: String,
         name:String,
+        phone:String,
+        gender:String,
+        birthdate:String,
         onResult: (UserModel?, String?) -> Unit
     ) {
         auth.createUserWithEmailAndPassword(email, password)
@@ -50,6 +52,9 @@ class FirebaseAuthService {
                     uid = firebaseUser.uid,
                     email = firebaseUser.email ?: "",
                     name = name,
+                    phone = phone,
+                    gender = gender,
+                    birthdate =birthdate
                 )
 
                 FirebaseFirestore.getInstance()
