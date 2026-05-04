@@ -7,8 +7,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.crudfirebase.appFirebase.ui.views.HomeScreen
 import com.example.crudfirebase.appFirebase.ui.views.LoginUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.RegisterUserScreen
+import com.example.crudfirebase.appFirebase.ui.views.SplashScreen
 
 
+/**Nav controller screen**/
 @Composable
 fun NavigationController() {
 
@@ -16,9 +18,11 @@ fun NavigationController() {
 
     NavHost(
     navController = navController,
-    startDestination = Screen.Login.route
+    startDestination = Screen.SplashScreen. route
     ) {
-
+        composable(Screen.SplashScreen.route) {
+            SplashScreen(navController)
+        }
         composable(Screen.Login.route) {
             LoginUserScreen(navController)
         }
@@ -28,6 +32,5 @@ fun NavigationController() {
         composable(Screen.HomeScreen.route) {
             HomeScreen(navController)
         }
-
     }
 }

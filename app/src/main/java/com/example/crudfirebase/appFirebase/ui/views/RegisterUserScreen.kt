@@ -156,9 +156,9 @@ fun RegisterUserScreen(navController: NavHostController) {
         }
     }
 
-    /*if (state is UiState.Loading) {
+    if (state is UiState.Loading) {
         LoadingScreen()
-    }*/
+    }
 
     CustomAlertDialog(
         show = showDialog.value,

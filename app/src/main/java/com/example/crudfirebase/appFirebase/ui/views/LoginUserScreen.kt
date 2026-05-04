@@ -81,22 +81,6 @@ fun LoginUserScreen(navController: NavHostController) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back",
-                        modifier = Modifier
-                            .size(24.dp)
-                            .align(Alignment.CenterStart)
-                            .clickable {
-                                navController.popBackStack()
-                            }
-                    )
-                }
             },
             bottomBar = {
 
