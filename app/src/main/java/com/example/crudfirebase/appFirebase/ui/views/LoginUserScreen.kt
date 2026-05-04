@@ -8,13 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -40,6 +37,7 @@ import com.example.crudfirebase.appFirebase.ui.components.CustomAlertDialog
 import com.example.crudfirebase.appFirebase.ui.components.EmailInputField
 import com.example.crudfirebase.appFirebase.ui.components.PasswordInputField
 import com.example.crudfirebase.appFirebase.ui.components.SlideToConfirmButton
+import com.example.crudfirebase.appFirebase.ui.helperFuntion.isValidCredentials
 import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
 import com.example.crudfirebase.appFirebase.viewmodel.UiState
 import com.example.crudfirebase.ui.theme.color_blue_backgraund
@@ -129,7 +127,7 @@ fun LoginUserScreen(navController: NavHostController) {
                     EmailInputField(
                         value = email.value,
                         onValueChange = { email.value = it },
-                        placeholder = "",
+                        placeholder = stringResource(id = R.string.text_email_user),
                         isFocused = false,
                         isError = false
                     )
@@ -138,18 +136,18 @@ fun LoginUserScreen(navController: NavHostController) {
                     PasswordInputField(
                         value = password.value,
                         onValueChange = { password.value = it },
-                        placeholder = "",
+                        placeholder = stringResource(id = R.string.text_password),
                     )
 
 
                     Spacer(Modifier.height(35.dp))
-                    SlideToConfirmButton(text = "Aceptar", onComplete = {
-                        if (email.value.isNotEmpty() && password.value.isNotEmpty()) {
+                    SlideToConfirmButton(
+                        text =stringResource(id = R.string.text_aceptar),
+                        enabled = isValidCredentials(email.value , password.value),
+                        onComplete = {
                             viewModel.login(email.value, password.value)
-                        } else {
-                            Log.e("LOGIN", "Campos vacíos")
                         }
-                    })
+                    )
                     Spacer(Modifier.height(20.dp))
                     Text(
                         stringResource(id = R.string.text_register_user),

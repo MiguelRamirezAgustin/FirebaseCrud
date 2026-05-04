@@ -67,7 +67,11 @@ fun EmailInputField(
 
         BasicTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = {
+                if (it.length <= 40) {
+                    onValueChange(it)
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             textStyle = TextStyle(

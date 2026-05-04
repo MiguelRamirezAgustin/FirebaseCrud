@@ -75,7 +75,11 @@ fun PasswordInputField(
 
         BasicTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = {
+                if (it.length <= 20) {
+                    onValueChange(it)
+                }
+            },
             modifier = Modifier
                 .weight(1f)
                 .onFocusChanged {

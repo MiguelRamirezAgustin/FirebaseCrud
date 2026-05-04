@@ -2,4 +2,10 @@
     <string name="app_name">CrudFirebase</string>
     <string name="btn_login">Login</string>
     <string name="text_register_user">¿Aún no te gas registrado?</string>
+    <string name="text_register">Registro</string>
+    <string name="text_name_user">Nombre completo</string>
+    <string name="text_email_user">Correo</string>
+    <string name="text_password">Contraseña</string>
+    <string name="text_register_user_screen">Registrar</string>
+    <string name="text_aceptar">Aceptar</string>
 </resources>

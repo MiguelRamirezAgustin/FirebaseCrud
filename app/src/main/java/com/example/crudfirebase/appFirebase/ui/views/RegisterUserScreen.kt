@@ -30,11 +30,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.crudfirebase.R
 import com.example.crudfirebase.appFirebase.data.remote.FirebaseAuthService
 import com.example.crudfirebase.appFirebase.data.repository.AuthRepository
 import com.example.crudfirebase.appFirebase.navigation.Screen
@@ -105,7 +107,7 @@ fun RegisterUserScreen(navController: NavHostController) {
             ) {
 
                 Text(
-                    text = "Registro",
+                    text = stringResource(id = R.string.text_register),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -115,7 +117,7 @@ fun RegisterUserScreen(navController: NavHostController) {
                     isIcon = Icons.Default.Person,
                     value = nameUser.value,
                     onValueChange = { nameUser.value = it },
-                    placeholder = "Nombre completo",
+                    placeholder = stringResource(id = R.string.text_name_user),
                     isFocused = false,
                     isError = false
                 )
@@ -124,20 +126,20 @@ fun RegisterUserScreen(navController: NavHostController) {
                 EmailInputField(
                     value = email.value,
                     onValueChange = { email.value = it },
-                    placeholder = "Correo"
+                    placeholder = stringResource(id = R.string.text_email_user)
                 )
 
                 Spacer(Modifier.height(16.dp))
                 PasswordInputField(
                     value = password.value,
                     onValueChange = { password.value = it },
-                    placeholder = "Contraseña"
+                    placeholder = stringResource(id = R.string.text_password)
                 )
 
                 Spacer(Modifier.height(35.dp))
 
                 SlideToConfirmButton(
-                    text = "Registrar",
+                    text = stringResource(id = R.string.text_register_user_screen),
                     enabled = email.value.isNotEmpty() && password.value.isNotEmpty(),
                     onComplete = {
                         viewModel.registerUser(email.value, password.value,nameUser.value)
