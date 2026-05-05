@@ -15,6 +15,9 @@ class AuthViewModel @Inject constructor(
     private val _state = mutableStateOf<UiState>(UiState.Idle)
     val state = _state
 
+    var users = mutableStateOf<List<UserModel>>(emptyList())
+        private set
+
     /** Login **/
     fun login(email: String, password: String) {
         state.value = UiState.Loading
@@ -52,6 +55,26 @@ class AuthViewModel @Inject constructor(
             }else{
                 UiState.Error(errorMsg ?: "")
             }
+        }
+    }
+
+    /**get user**/
+    fun deleteUser(uid: String){
+        state.value = UiState.Loading
+        repository.deleteUser(uid) { success, errorMsg ->
+            state.value =
+                if (success) {
+                    getUsers()
+                    UiState.Message("Usuario Eliminado")
+                } else {
+                    UiState.Error(errorMsg ?: "")
+                }
+        }
+    }
+
+    fun getUsers(){
+        repository.getUsers { result ->
+            users.value = result
         }
     }
 }

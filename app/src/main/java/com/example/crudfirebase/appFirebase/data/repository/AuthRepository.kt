@@ -44,4 +44,19 @@ class AuthRepository(private val service: FirebaseAuthService) {
                 onResult: (UserModel?, String?) -> Unit){
         service.updateUser(uid,email, name, phone, gender, birthdate,onResult)
     }
+
+    /***
+     * Delete user
+     * */
+    fun deleteUser(uid: String,
+                   onResult: (Boolean, String?) -> Unit){
+        service.deleteUser(uid, onResult)
+    }
+
+    /**Get list user**/
+    fun getUsers(
+        onResult: (List<UserModel>) -> Unit
+    ){
+        service.getUsers(onResult)
+    }
 }

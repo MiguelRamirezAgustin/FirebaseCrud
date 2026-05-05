@@ -7,4 +7,5 @@ data class UserModel(
     val phone: String = "",
     val gender: String = "",
     val birthdate: String = "",
+    val admin:Boolean = false
 )

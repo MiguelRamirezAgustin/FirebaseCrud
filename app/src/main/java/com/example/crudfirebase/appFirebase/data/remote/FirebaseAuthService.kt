@@ -112,4 +112,38 @@ class FirebaseAuthService {
                 onResult(null, it.message)
             }
     }
+
+    /**fun delete user**/
+    fun deleteUser(uid: String,
+                   onResult: (Boolean, String?) -> Unit){
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(uid)
+            .delete()
+            .addOnSuccessListener {
+                onResult(true, null)
+            }
+            .addOnFailureListener {
+
+                onResult(false, it.message)
+            }
+    }
+
+    /**fun get use list**/
+    fun getUsers(
+        onResult: (List<UserModel>) -> Unit
+    ){
+
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .get()
+            .addOnSuccessListener { result ->
+                val users = result.documents
+                    .mapNotNull {
+                        it.toObject(UserModel::class.java)
+                    }
+
+                onResult(users)
+            }
+    }
 }

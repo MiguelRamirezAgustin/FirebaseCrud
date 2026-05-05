@@ -1,5 +1,6 @@
 package com.example.crudfirebase.appFirebase.ui.views
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
@@ -64,7 +66,9 @@ fun HomeScreen(navController: NavHostController) {
             .document(uid!!)
             .get()
             .addOnSuccessListener { document ->
+                Log.d("", "User:: ${document}")
                 userLogin.value = document.toObject(UserModel::class.java)
+                Log.d("", "User:: ${userLogin.value}")
             }
     }
 
@@ -139,6 +143,28 @@ fun HomeScreen(navController: NavHostController) {
                         )
                     }
                 )
+
+                if (userLogin.value?.admin == true) {
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Administrar perfil",
+                                fontWeight = FontWeight.Medium
+                            )
+                        },
+                        selected = false,
+                        onClick = {
+                            navController.navigate(Screen.ListUserScreen.route)
+                        },
+                        icon = {
+                            Icon(
+                                Icons.Default.AccountCircle,
+                                contentDescription = null,
+                                tint = color_blue,
+                            )
+                        }
+                    )
+                }
 
                 NavigationDrawerItem(
                     label = {

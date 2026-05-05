@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.crudfirebase.appFirebase.ui.views.EditProfileUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.HomeScreen
+import com.example.crudfirebase.appFirebase.ui.views.ListUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.LoginUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.ProfileUserScreenInfo
 import com.example.crudfirebase.appFirebase.ui.views.RegisterUserScreen
@@ -39,6 +40,9 @@ fun NavigationController() {
         }
         composable(Screen.ProfileUserScreenInfo.route) {
             ProfileUserScreenInfo(navController)
+        }
+        composable(Screen.ListUserScreen.route) {
+            ListUserScreen(navController)
         }
     }
 }
