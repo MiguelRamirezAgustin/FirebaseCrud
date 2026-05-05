@@ -225,7 +225,6 @@ fun HomeScreen(navController: NavHostController) {
             }
 
         ) { innerPadding ->
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -233,30 +232,7 @@ fun HomeScreen(navController: NavHostController) {
                 contentAlignment = Alignment.Center
             ) {
 
-                Text("Pantalla Home")
             }
         }
     }
 }
-/*@Composable
-fun HomeScreen(navController: NavController){
-    Column(modifier = Modifier.fillMaxSize()) {
-        Spacer(modifier = Modifier.height(200.dp))
-        Button(
-            onClick = {
-
-                FirebaseAuth.getInstance().signOut()
-
-                navController.navigate(Screen.Login.route) {
-
-                    popUpTo(Screen.HomeScreen.route) {
-                        inclusive = true
-                    }
-                }
-            }
-        ) {
-            Text("Cerrar sesión")
-        }
-    }
-
-}*/

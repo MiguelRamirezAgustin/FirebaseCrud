@@ -54,6 +54,8 @@ import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
 import com.example.crudfirebase.appFirebase.viewmodel.UiState
 import com.example.crudfirebase.ui.theme.color_write
 import androidx.compose.material3.*
+import androidx.compose.ui.platform.LocalContext
+import com.example.crudfirebase.appFirebase.analytics.AnalyticsManager
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -64,6 +66,8 @@ import java.util.Locale
 fun RegisterUserScreen(navController: NavHostController) {
 
     val viewModel: AuthViewModel = hiltViewModel()
+    val context = LocalContext.current
+    val isAnality = AnalyticsManager(context = context )
     val state = viewModel.state.value
     var showDialog = remember { mutableStateOf(false) }
     var showDatePicker = remember { mutableStateOf(false) }
@@ -233,6 +237,7 @@ fun RegisterUserScreen(navController: NavHostController) {
                     text = stringResource(id = R.string.text_register_user_screen),
                     enabled = email.value.isNotEmpty() && password.value.isNotEmpty() && gender.value.isNotEmpty() && phone.value.isNotEmpty()&& birthdate.value.isNotEmpty(),
                     onComplete = {
+                        isAnality.logScreen("RegisterUser")
                         viewModel.registerUser(
                            email= email.value,
                             password = password.value,

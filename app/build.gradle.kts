@@ -78,7 +78,8 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
-    // Fix JavaPoet
+    // analytics
+    implementation("com.google.firebase:firebase-analytics")
 }
 
 kapt {

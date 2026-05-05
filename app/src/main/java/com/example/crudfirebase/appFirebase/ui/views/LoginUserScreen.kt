@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.crudfirebase.R
+import com.example.crudfirebase.appFirebase.analytics.AnalyticsManager
 import com.example.crudfirebase.appFirebase.navigation.Screen
 import com.example.crudfirebase.appFirebase.ui.components.CustomAlertDialog
 import com.example.crudfirebase.appFirebase.ui.components.EmailInputField
@@ -45,8 +47,9 @@ import com.example.crudfirebase.ui.theme.color_write
 
 @Composable
 fun LoginUserScreen(navController: NavHostController) {
+    val context = LocalContext.current
     val viewModel: AuthViewModel = hiltViewModel()
-
+    val isAnality = AnalyticsManager(context = context )
     val state = viewModel.state.value
     var email = remember { mutableStateOf("") }
     var password = remember { mutableStateOf("") }
@@ -60,6 +63,9 @@ fun LoginUserScreen(navController: NavHostController) {
             is UiState.Success -> {
                   val user = state.user
                 Log.d("", "LoginSuccess${user.name} ${user.email}")
+                isAnality.logLogin(
+                    "LoginSuccess "+user.name
+                )
                 navController.navigate(Screen.HomeScreen.route)
             }
 
@@ -145,6 +151,7 @@ fun LoginUserScreen(navController: NavHostController) {
                         text =stringResource(id = R.string.text_aceptar),
                         enabled = isValidCredentials(email.value , password.value),
                         onComplete = {
+                            isAnality.logScreen("LoginUser")
                             viewModel.login(email.value, password.value)
                         }
                     )
