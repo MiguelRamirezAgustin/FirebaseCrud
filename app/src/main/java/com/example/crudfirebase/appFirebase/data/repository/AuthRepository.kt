@@ -30,4 +30,18 @@ class AuthRepository(private val service: FirebaseAuthService) {
     ) {
         service.registerUser(email, password, name, phone, gender, birthdate ,onResult)
     }
+
+    /**
+     * Fun para actualizar usuario
+     **/
+
+    fun update( uid:String,
+                email: String,
+                name: String,
+                phone:String,
+                gender:String,
+                birthdate:String,
+                onResult: (UserModel?, String?) -> Unit){
+        service.updateUser(uid,email, name, phone, gender, birthdate,onResult)
+    }
 }

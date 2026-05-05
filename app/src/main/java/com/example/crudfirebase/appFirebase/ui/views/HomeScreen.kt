@@ -94,7 +94,7 @@ fun HomeScreen(navController: NavHostController) {
                 )
 
                 Text(
-                    text = "Miguel Ramirez",
+                    text = "${userLogin.value?.name}",
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
 

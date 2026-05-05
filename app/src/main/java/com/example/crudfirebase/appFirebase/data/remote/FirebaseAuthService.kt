@@ -1,5 +1,6 @@
 package com.example.crudfirebase.appFirebase.data.remote
 
+import android.util.Log
 import com.example.crudfirebase.appFirebase.data.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -69,6 +70,45 @@ class FirebaseAuthService {
                     }
             }
             .addOnFailureListener {
+                onResult(null, it.message)
+            }
+    }
+
+    /**fun update user**/
+    fun updateUser(  uid:String,
+                     email: String,
+                     name:String,
+                     phone:String,
+                     gender:String,
+                     birthdate:String,
+                     onResult: (UserModel?, String?) -> Unit){
+        val db = FirebaseFirestore.getInstance()
+
+        val updates = mapOf(
+            "email" to email,
+            "name" to name,
+            "phone" to phone,
+            "gender" to gender,
+            "birthdate" to birthdate
+        )
+
+        db.collection("users")
+            .document(uid)
+            .update(updates)
+            .addOnSuccessListener {
+                val user = UserModel(
+                    uid = uid,
+                    email = email,
+                    name = name,
+                    phone = phone,
+                    gender = gender,
+                    birthdate = birthdate
+                )
+                Log.d("Print Log ========>", " Update exitoso")
+                onResult(user, null)
+            }
+            .addOnFailureListener {
+                Log.d("Print Log ========>", " Error update")
                 onResult(null, it.message)
             }
     }

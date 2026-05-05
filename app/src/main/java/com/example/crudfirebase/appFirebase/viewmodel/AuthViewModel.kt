@@ -34,11 +34,23 @@ class AuthViewModel @Inject constructor(
         state.value = UiState.Loading
 
         repository.register(email, password ,name, phone, gender, birthdate ) { result, errorMsg ->
-
             state.value = if (result != null) {
                 UiState.Success(result)
             } else {
                 UiState.Error(errorMsg ?: "Error desconocido")
+            }
+        }
+    }
+
+    /**Update info use**/
+    fun updateUser(uid:String,email: String,name:String, phone:String, gender:String, birthdate:String ){
+        state.value = UiState.Loading
+
+        repository.update(uid, email, name, phone, gender, birthdate){ result, errorMsg ->
+            state.value = if (result != null){
+                UiState.Success(result)
+            }else{
+                UiState.Error(errorMsg ?: "")
             }
         }
     }

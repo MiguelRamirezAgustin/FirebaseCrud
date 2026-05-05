@@ -32,6 +32,7 @@ import com.example.crudfirebase.ui.theme.color_write
 
 @Composable
 fun InputFieldGeneric(
+    maxDigit:Int,
     typeKeyboardType: KeyboardType,
     icon: ImageVector,
     value: String,
@@ -74,7 +75,7 @@ fun InputFieldGeneric(
         BasicTextField(
             value = value,
             onValueChange = {
-                if (it.length <= 40) {
+                if (it.length <= maxDigit) {
                     onValueChange(it)
                 }
             },

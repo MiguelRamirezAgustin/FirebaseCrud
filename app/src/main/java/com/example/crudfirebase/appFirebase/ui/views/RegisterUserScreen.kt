@@ -156,6 +156,7 @@ fun RegisterUserScreen(navController: NavHostController) {
                 )
                 Spacer(Modifier.height(16.dp))
                 InputFieldGeneric(
+                    maxDigit = 10,
                     typeKeyboardType = KeyboardType.Phone,
                     icon = Icons.Default.Phone,
                     value = phone.value,
@@ -166,6 +167,7 @@ fun RegisterUserScreen(navController: NavHostController) {
                 )
                 Spacer(Modifier.height(16.dp))
                 InputFieldGeneric(
+                    maxDigit = 20,
                     typeKeyboardType = KeyboardType.Text,
                     icon = Icons.Default.DateRange,
                     value = birthdate.value,
