@@ -44,6 +44,8 @@ import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
 import com.example.crudfirebase.appFirebase.viewmodel.UiState
 import com.example.crudfirebase.ui.theme.color_blue_backgraund
 import com.example.crudfirebase.ui.theme.color_write
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 
 @Composable
 fun LoginUserScreen(navController: NavHostController) {
@@ -66,6 +68,16 @@ fun LoginUserScreen(navController: NavHostController) {
                 isAnality.logLogin(
                     "LoginSuccess "+user.name
                 )
+                FirebaseMessaging.getInstance().token
+                    .addOnSuccessListener { token ->
+
+                        FirebaseFirestore.getInstance()
+                            .collection("users")
+                            .document(user.uid)
+                            .update("fcmToken", token)
+
+                        Log.d("FCM_TOKEN", "Logintoken ${token}")
+                    }
                 navController.navigate(Screen.HomeScreen.route)
             }
 
