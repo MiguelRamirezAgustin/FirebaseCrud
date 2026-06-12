@@ -61,14 +61,22 @@ fun HomeScreen(navController: NavHostController) {
 
     LaunchedEffect(Unit) {
 
+        Log.d("HOME", "UID: $uid")
+
+        if (uid == null) {
+            navController.navigate(Screen.Login.route) {
+                popUpTo(0)
+            }
+            return@LaunchedEffect
+        }
+
         FirebaseFirestore.getInstance()
             .collection("users")
-            .document(uid!!)
+            .document(uid)
             .get()
             .addOnSuccessListener { document ->
-                Log.d("", "User:: ${document}")
-                userLogin.value = document.toObject(UserModel::class.java)
-                Log.d("", "User:: ${userLogin.value}")
+                userLogin.value =
+                    document.toObject(UserModel::class.java)
             }
     }
 

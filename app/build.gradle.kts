@@ -106,6 +106,9 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.10")
     // Coroutines test
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 }
 
 kapt {

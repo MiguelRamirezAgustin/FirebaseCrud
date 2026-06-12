@@ -56,6 +56,7 @@ import com.example.crudfirebase.ui.theme.color_write
 import androidx.compose.material3.*
 import androidx.compose.ui.platform.LocalContext
 import com.example.crudfirebase.appFirebase.analytics.AnalyticsManager
+import com.example.crudfirebase.ui.theme.color_black
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -146,6 +147,7 @@ fun RegisterUserScreen(navController: NavHostController) {
                 Text(
                     text = stringResource(id = R.string.text_register),
                     fontSize = 24.sp,
+                    color = color_black,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -343,7 +345,8 @@ fun getGender(gender: MutableState<String>) {
             modifier = Modifier.padding(start = 8.dp),
             text = "Genero:",
             fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
+            color = color_black
         )
         Row(
             modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
@@ -358,7 +361,8 @@ fun getGender(gender: MutableState<String>) {
             )
             Text(
                 "Hombre",
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = color_black
             )
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -372,7 +376,8 @@ fun getGender(gender: MutableState<String>) {
 
             Text(
                 "Mujer",
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = color_black
             )
         }
     }

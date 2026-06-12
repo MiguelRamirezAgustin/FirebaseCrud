@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import android.Manifest
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import com.example.crudfirebase.appFirebase.navigation.NavigationController
 import com.example.crudfirebase.ui.theme.CrudFirebaseTheme
 import com.google.firebase.messaging.FirebaseMessaging
@@ -22,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
 
     private val requestPermissionLauncher =
         registerForActivityResult(

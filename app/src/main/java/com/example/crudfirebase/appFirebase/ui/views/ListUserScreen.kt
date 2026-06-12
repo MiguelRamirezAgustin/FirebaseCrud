@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.example.crudfirebase.appFirebase.viewmodel.UiState
+import com.example.crudfirebase.ui.theme.color_black
 import com.example.crudfirebase.ui.theme.color_blue
 import com.example.crudfirebase.ui.theme.color_write
 
@@ -128,13 +129,16 @@ fun ListUserScreen(
                     ) {
 
                         Text(text = user.name,
-                            fontWeight = FontWeight.Medium,)
+                            fontWeight = FontWeight.Medium,
+                            color = color_black)
 
                         Text(text = user.email,
-                            fontWeight = FontWeight.Normal,)
+                            fontWeight = FontWeight.Normal,
+                            color = color_black)
 
                         Text(text = user.phone,
-                            fontWeight = FontWeight.Normal,)
+                            fontWeight = FontWeight.Normal,
+                            color = color_black)
 
                         Spacer(modifier = Modifier.height(12.dp))
 
