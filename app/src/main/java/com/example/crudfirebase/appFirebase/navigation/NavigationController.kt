@@ -11,6 +11,8 @@ import com.example.crudfirebase.appFirebase.ui.views.LoginUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.ProfileUserScreenInfo
 import com.example.crudfirebase.appFirebase.ui.views.RegisterUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.SplashScreen
+import com.example.crudfirebase.appFirebase.ui.views.product.AddProductScreen
+import com.example.crudfirebase.appFirebase.ui.views.product.ProductListAdmin
 
 
 /**Nav controller screen**/
@@ -44,5 +46,12 @@ fun NavigationController() {
         composable(Screen.ListUserScreen.route) {
             ListUserScreen(navController)
         }
+        composable(Screen.ProductListAdmin.route) {
+            ProductListAdmin(navController)
+        }
+        composable(Screen.AddProductScreen.route) {
+            AddProductScreen(navController)
+        }
+
     }
 }

@@ -12,4 +12,5 @@
     <string name="text_phone">Telefono</string>
     <string name="text_birthdate">Fecha de nacimiento</string>
     <string name="text_update">Actualizar</string>
+    <string name="text_save">Guardar</string>
 </resources>

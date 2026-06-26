@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -151,6 +153,47 @@ fun HomeScreen(navController: NavHostController) {
                         )
                     }
                 )
+                if (userLogin.value?.admin == true) {
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Productos",
+                                fontWeight = FontWeight.Medium
+                            )
+                        },
+                        selected = false,
+                        onClick = {
+                            navController.navigate(Screen.ProductListAdmin.route)
+                        },
+                        icon = {
+                            Icon(
+                                Icons.Default.ShoppingCart,
+                                contentDescription = null,
+                                tint = color_blue,
+                            )
+                        }
+                    )
+
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Agregar Productos",
+                                fontWeight = FontWeight.Medium
+                            )
+                        },
+                        selected = false,
+                        onClick = {
+                            navController.navigate(Screen.AddProductScreen.route)
+                        },
+                        icon = {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = null,
+                                tint = color_blue,
+                            )
+                        }
+                    )
+                }
 
                 if (userLogin.value?.admin == true) {
                     NavigationDrawerItem(
