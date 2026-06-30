@@ -54,9 +54,11 @@ import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
 import com.example.crudfirebase.appFirebase.viewmodel.UiState
 import com.example.crudfirebase.ui.theme.color_write
 import androidx.compose.material3.*
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import com.example.crudfirebase.appFirebase.analytics.AnalyticsManager
 import com.example.crudfirebase.ui.theme.color_black
+import com.example.crudfirebase.ui.theme.color_fondo_oscuro
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -106,6 +108,8 @@ fun RegisterUserScreen(navController: NavHostController) {
     }
 
     Scaffold(
+        containerColor = color_fondo_oscuro,
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             Box(
                 modifier = Modifier
@@ -125,15 +129,21 @@ fun RegisterUserScreen(navController: NavHostController) {
                 )
             }
         },
-        modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color_write)
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFF0E6A63),
+                            Color(0xFF2C2F39),
+                            Color(0xFF23252D)
+                        )
+                    )
+                )
+                .padding(innerPadding)
         ) {
 
             Column(

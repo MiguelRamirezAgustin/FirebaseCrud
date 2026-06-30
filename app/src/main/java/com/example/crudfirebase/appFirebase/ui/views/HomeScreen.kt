@@ -2,13 +2,18 @@ package com.example.crudfirebase.appFirebase.ui.views
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
@@ -22,6 +27,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -36,6 +42,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +53,7 @@ import com.example.crudfirebase.R
 import com.example.crudfirebase.appFirebase.data.model.UserModel
 import com.example.crudfirebase.appFirebase.navigation.Screen
 import com.example.crudfirebase.ui.theme.color_blue
+import com.example.crudfirebase.ui.theme.color_write
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -89,161 +98,87 @@ fun HomeScreen(navController: NavHostController) {
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
-
         drawerState = drawerState,
-
         drawerContent = {
-
-            ModalDrawerSheet {
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Image(
-                    painter = painterResource(id = R.drawable.iconfirebase),
-                    contentDescription = null,
+            ModalDrawerSheet(
+                modifier = Modifier.fillMaxWidth(0.85f)
+            ) {
+                Column(
                     modifier = Modifier
-                        .size(120.dp)
+                        .fillMaxSize()
                         .padding(16.dp)
-                        .align(Alignment.CenterHorizontally),
-                    contentScale = ContentScale.Crop
-                )
+                ) {
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                Text(
-                    text = "${userLogin.value?.name}",
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+                    Image(
+                        painter = painterResource(R.drawable.iconfirebase),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            "Perfil",
-                            fontWeight = FontWeight.Medium
-                        )
-                    },
-                    selected = false,
-                    onClick = {
+                    // Tarjeta del usuario
+                    CardUser(userLogin.value)
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    DrawerItemCard(
+                        title = "Ver perfil",
+                        icon = Icons.Default.Person
+                    ) {
                         navController.navigate(Screen.ProfileUserScreenInfo.route)
-                    },
-                    icon = {
-                        Icon(
-                            Icons.Default.Person,
-                            contentDescription = null,
-                            tint = color_blue,
-                        )
                     }
-                )
 
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            "Editar perfil",
-                            fontWeight = FontWeight.Medium
-                        )
-                    },
-                    selected = false,
-                    onClick = {
+                    DrawerItemCard(
+                        title = "Actualizar información",
+                        icon = Icons.Default.Edit
+                    ) {
                         navController.navigate(Screen.EditProfileUserScreen.route)
-                    },
-                    icon = {
-                        Icon(
-                            Icons.Default.Edit,
-                            contentDescription = null,
-                            tint = color_blue,
-                        )
                     }
-                )
-                if (userLogin.value?.admin == true) {
-                    NavigationDrawerItem(
-                        label = {
-                            Text(
-                                "Productos",
-                                fontWeight = FontWeight.Medium
-                            )
-                        },
-                        selected = false,
-                        onClick = {
+
+                    if (userLogin.value?.admin == true) {
+
+                        DrawerItemCard(
+                            title = "Mis productos",
+                            icon = Icons.Default.ShoppingCart
+                        ) {
                             navController.navigate(Screen.ProductListAdmin.route)
-                        },
-                        icon = {
-                            Icon(
-                                Icons.Default.ShoppingCart,
-                                contentDescription = null,
-                                tint = color_blue,
-                            )
                         }
-                    )
 
-                    NavigationDrawerItem(
-                        label = {
-                            Text(
-                                "Agregar Productos",
-                                fontWeight = FontWeight.Medium
-                            )
-                        },
-                        selected = false,
-                        onClick = {
+                        DrawerItemCard(
+                            title = "Registrar artículo",
+                            icon = Icons.Default.Add
+                        ) {
                             navController.navigate(Screen.AddProductScreen.route)
-                        },
-                        icon = {
-                            Icon(
-                                Icons.Default.Add,
-                                contentDescription = null,
-                                tint = color_blue,
-                            )
                         }
-                    )
-                }
 
-                if (userLogin.value?.admin == true) {
-                    NavigationDrawerItem(
-                        label = {
-                            Text(
-                                "Administrar perfil",
-                                fontWeight = FontWeight.Medium
-                            )
-                        },
-                        selected = false,
-                        onClick = {
+                        DrawerItemCard(
+                            title = "Administrar cuenta",
+                            icon = Icons.Default.AccountCircle
+                        ) {
                             navController.navigate(Screen.ListUserScreen.route)
-                        },
-                        icon = {
-                            Icon(
-                                Icons.Default.AccountCircle,
-                                contentDescription = null,
-                                tint = color_blue,
-                            )
                         }
-                    )
-                }
+                    }
 
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            "Cerrar sesión",
-                            fontWeight = FontWeight.Medium
-                        )
-                    },
-                    selected = false,
-                    onClick = {
-                        FirebaseAuth
-                            .getInstance()
-                            .signOut()
+                    DrawerItemCard(
+                        title = "Cerrar sesión",
+                        icon = Icons.Default.ExitToApp,
+                        iconTint = Color.Red,
+                        textColor = Color.Red
+                    ) {
+
+                        FirebaseAuth.getInstance().signOut()
 
                         navController.navigate(Screen.Login.route) {
                             popUpTo(Screen.HomeScreen.route) {
                                 inclusive = true
                             }
                         }
-                    },
-                    icon = {
-                        Icon(
-                            Icons.Default.ExitToApp,
-                            contentDescription = null,
-                            tint = color_blue,
-                        )
                     }
-                )
+                }
             }
         }
     ) {
@@ -252,12 +187,8 @@ fun HomeScreen(navController: NavHostController) {
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(
-                            "Hola ${userLogin.value?.name}",
-                            fontWeight = FontWeight.Medium
-                        )
+                        Text("Hola ${userLogin.value?.name}")
                     },
-
                     navigationIcon = {
                         IconButton(
                             onClick = {
@@ -279,11 +210,83 @@ fun HomeScreen(navController: NavHostController) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding),
-                contentAlignment = Alignment.Center
+                    .padding(innerPadding)
             ) {
-
             }
+        }
+    }
+}
+
+@Composable
+fun CardUser(
+    user: UserModel?
+) {
+
+    androidx.compose.material3.Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
+                contentDescription = null,
+                modifier = Modifier.size(90.dp)
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = user?.name ?: "",
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+    }
+}
+
+@Composable
+fun DrawerItemCard(
+    title: String,
+    icon: ImageVector,
+    iconTint: Color = color_write,
+    textColor: Color = color_write,
+    onClick: () -> Unit
+) {
+
+    androidx.compose.material3.Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp)
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(18.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = iconTint
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Text(
+                text = title,
+                color = textColor,
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
 }

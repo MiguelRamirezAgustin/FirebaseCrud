@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +51,8 @@ import com.example.crudfirebase.appFirebase.ui.components.PasswordInputField
 import com.example.crudfirebase.appFirebase.ui.components.SlideToConfirmButton
 import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
 import com.example.crudfirebase.appFirebase.viewmodel.UiState
+import com.example.crudfirebase.ui.theme.color_black
+import com.example.crudfirebase.ui.theme.color_fondo_oscuro
 import com.example.crudfirebase.ui.theme.color_write
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -154,6 +157,7 @@ fun EditProfileUserScreen(navController: NavController){
     }
 
     Scaffold (
+        containerColor = color_fondo_oscuro,
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
@@ -167,6 +171,7 @@ fun EditProfileUserScreen(navController: NavController){
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",
+                    tint = color_write,
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.CenterStart)
@@ -180,7 +185,15 @@ fun EditProfileUserScreen(navController: NavController){
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color_write)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFF2C2F39),
+                            Color(0xFF23252D),
+                            Color(0xFF0E6A63),
+                        )
+                    )
+                )
                 .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
@@ -195,7 +208,8 @@ fun EditProfileUserScreen(navController: NavController){
                 Text(
                     text = stringResource(id = R.string.text_update_info),
                     fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = color_write,
                 )
 
                 Spacer(Modifier.height(24.dp))
@@ -215,7 +229,6 @@ fun EditProfileUserScreen(navController: NavController){
                     value = phone.value,
                     onValueChange = { phone.value = it },
                     placeholder = stringResource(id = R.string.text_phone),
-                    isFocused = false,
                     isError = false
                 )
                 Spacer(Modifier.height(16.dp))

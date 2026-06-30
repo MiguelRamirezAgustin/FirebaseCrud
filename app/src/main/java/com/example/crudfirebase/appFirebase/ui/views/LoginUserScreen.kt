@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -53,6 +54,7 @@ import com.example.crudfirebase.appFirebase.ui.utils.BiometricHelper
 import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
 import com.example.crudfirebase.appFirebase.viewmodel.UiState
 import com.example.crudfirebase.ui.theme.color_blue_backgraund
+import com.example.crudfirebase.ui.theme.color_fondo_oscuro
 import com.example.crudfirebase.ui.theme.color_write
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -65,14 +67,15 @@ import kotlinx.coroutines.launch
 fun LoginUserScreen(navController: NavHostController) {
     val context = LocalContext.current
     val viewModel: AuthViewModel = hiltViewModel()
-    val isAnality = AnalyticsManager(context = context )
+    val isAnality = AnalyticsManager(context = context)
     val state = viewModel.state.value
     var email = remember { mutableStateOf("") }
     var password = remember { mutableStateOf("") }
     var showDialog = remember { mutableStateOf(false) }
-    val biometricEnabled = DataStoreManager.getBiometricEnabled(context).collectAsState(initial = false)
+    val biometricEnabled =
+        DataStoreManager.getBiometricEnabled(context).collectAsState(initial = false)
     val activity = context as FragmentActivity
-    var showEnableBiometricDialog =remember { mutableStateOf(false) }
+    var showEnableBiometricDialog = remember { mutableStateOf(false) }
     val savedEmail = DataStoreManager.getEmail(context).collectAsState(initial = "")
     val savedPassword = DataStoreManager.getPassword(context).collectAsState(initial = "")
 
@@ -82,10 +85,10 @@ fun LoginUserScreen(navController: NavHostController) {
         when (state) {
 
             is UiState.Success -> {
-                  val user = state.user
+                val user = state.user
                 Log.d("", "LoginSuccess${user.name} ${user.email}")
                 isAnality.logLogin(
-                    "LoginSuccess "+user.name
+                    "LoginSuccess " + user.name
                 )
                 FirebaseMessaging.getInstance().token
                     .addOnSuccessListener { token ->
@@ -162,101 +165,109 @@ fun LoginUserScreen(navController: NavHostController) {
         }
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.White
-    ) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-            },
-            bottomBar = {
+    Scaffold(
+        containerColor = color_fondo_oscuro,
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
 
-            }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFF0E6A63),
+                            Color(0xFF2C2F39),
+                            Color(0xFF23252D)
+                        )
+                    )
+                )
+                .padding(innerPadding)
+        ) {
 
-        ) { innerPadding ->
-
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color_blue_backgraund)
-                    .padding(innerPadding),
-                contentAlignment = Alignment.Center
+                    .padding(horizontal = 40.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 40.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+
+                Surface(
+                    modifier = Modifier.size(95.dp),
+                    shape = CircleShape,
+                    color = Color(0xFF4D5663),
+                    shadowElevation = 12.dp
                 ) {
 
                     Box(
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape)
-                            .background(Color.White),
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
+
                         Icon(
                             painter = painterResource(R.drawable.iconfirebase),
-                            contentDescription = "firebase icon",
-                            modifier = Modifier.size(65.dp),
+                            contentDescription = null,
+                            modifier = Modifier.size(55.dp),
                             tint = Color.Unspecified
                         )
+
                     }
-                    Spacer(Modifier.height(10.dp))
 
-                    Text(
-                        text = stringResource(id =R.string.btn_login ),
-                        color = Color.Black,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(Modifier.height(40.dp))
-                    EmailInputField(
-                        value = email.value,
-                        onValueChange = { email.value = it },
-                        placeholder = stringResource(id = R.string.text_email_user),
-                        isFocused = false,
-                        isError = false
-                    )
+                }
 
-                    Spacer(Modifier.height(16.dp))
-                    PasswordInputField(
-                        value = password.value,
-                        onValueChange = { password.value = it },
-                        placeholder = stringResource(id = R.string.text_password),
-                    )
+                Spacer(Modifier.height(20.dp))
+
+                Text(
+                    text = stringResource(R.string.btn_login),
+                    color = Color.White,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(Modifier.height(40.dp))
+                EmailInputField(
+                    value = email.value,
+                    onValueChange = { email.value = it },
+                    placeholder = stringResource(id = R.string.text_email_user),
+                    isFocused = false,
+                    isError = false
+                )
+
+                Spacer(Modifier.height(16.dp))
+                PasswordInputField(
+                    value = password.value,
+                    onValueChange = { password.value = it },
+                    placeholder = stringResource(id = R.string.text_password),
+                )
 
 
-                    Spacer(Modifier.height(35.dp))
-                    SlideToConfirmButton(
-                        text =stringResource(id = R.string.text_aceptar),
-                        enabled = isValidCredentials(email.value , password.value),
-                        onComplete = {
-                            isAnality.logScreen("LoginUser")
-                            viewModel.login(email.value, password.value)
-                        }
-                    )
-                    Spacer(Modifier.height(20.dp))
-                    Text(
-                        stringResource(id = R.string.text_register_user),
-                        color = color_write,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.clickable {
-                            navController.navigate(Screen.Register.route)
-                        }
-                    )
+                Spacer(Modifier.height(35.dp))
+                SlideToConfirmButton(
+                    text = stringResource(id = R.string.text_aceptar),
+                    enabled = isValidCredentials(email.value, password.value),
+                    onComplete = {
+                        isAnality.logScreen("LoginUser")
+                        viewModel.login(email.value, password.value)
+                    }
+                )
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    stringResource(id = R.string.text_register_user),
+                    color = Color.LightGray,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.clickable {
+                        navController.navigate(Screen.Register.route)
+                    }
+                )
 
-                    Surface(
-                        modifier = Modifier
-                            .padding(top = 35.dp)
-                            .size(90.dp),
-                        shape = CircleShape,
-                        shadowElevation = 2.dp,
-                    ) {
+                Surface(
+                    modifier = Modifier
+                        .padding(top = 35.dp)
+                        .size(90.dp),
+                    shape = CircleShape,
+                    shadowElevation = 2.dp,
+                ) {
                     IconButton(
                         modifier = Modifier,
                         onClick = {
@@ -283,86 +294,86 @@ fun LoginUserScreen(navController: NavHostController) {
                         Icon(
                             painter = painterResource(R.drawable.huella_dactilar),
                             contentDescription = "Huella",
-                            tint = Color.Unspecified,
-                            modifier = Modifier.size(55.dp)
+                            tint = Color.White,
+                            modifier = Modifier.size(50.dp)
                         )
-                    }
                     }
                 }
             }
         }
-
-
-
-        if (state is UiState.Loading) {
-            LoadingScreen()
-        }
-
-        CustomAlertDialog(
-            show = showDialog.value,
-            title = "Aviso",
-            subtitle = "Ocurrio un error intenta nuevamente valida los datos ingresados",
-            buttonText = "Aceptar",
-            onDismiss = {
-                showDialog.value = false
-            },
-            onConfirm = {}
-        )
-
-        if (showEnableBiometricDialog.value) {
-
-            AlertDialog(
-                onDismissRequest = {},
-                title = {
-                    Text("Activar huella")
-                },
-                text = {
-                    Text(
-                        "¿Deseas iniciar sesión usando tu huella digital?"
-                    )
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-
-                            CoroutineScope(Dispatchers.IO).launch {
-                                DataStoreManager.saveBiometricEnabled(
-                                    context,
-                                    true
-                                )
-                            }
-
-                            showEnableBiometricDialog.value = false
-
-                            navController.navigate(Screen.HomeScreen.route) {
-                                popUpTo(Screen.Login.route) {
-                                    inclusive = true
-                                }
-                            }
-                        }
-                    ) {
-                        Text("Aceptar")
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-
-                            showEnableBiometricDialog.value = false
-
-                            navController.navigate(Screen.HomeScreen.route) {
-                                popUpTo(Screen.Login.route) {
-                                    inclusive = true
-                                }
-                            }
-                        }
-                    ) {
-                        Text("Ahora no")
-                    }
-                }
-            )
-        }
     }
+
+
+
+    if (state is UiState.Loading) {
+        LoadingScreen()
+    }
+
+    CustomAlertDialog(
+        show = showDialog.value,
+        title = "Aviso",
+        subtitle = "Ocurrio un error intenta nuevamente valida los datos ingresados",
+        buttonText = "Aceptar",
+        onDismiss = {
+            showDialog.value = false
+        },
+        onConfirm = {}
+    )
+
+    if (showEnableBiometricDialog.value) {
+
+        AlertDialog(
+            onDismissRequest = {},
+            title = {
+                Text("Activar huella")
+            },
+            text = {
+                Text(
+                    "¿Deseas iniciar sesión usando tu huella digital?"
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+
+                        CoroutineScope(Dispatchers.IO).launch {
+                            DataStoreManager.saveBiometricEnabled(
+                                context,
+                                true
+                            )
+                        }
+
+                        showEnableBiometricDialog.value = false
+
+                        navController.navigate(Screen.HomeScreen.route) {
+                            popUpTo(Screen.Login.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                ) {
+                    Text("Aceptar")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+
+                        showEnableBiometricDialog.value = false
+
+                        navController.navigate(Screen.HomeScreen.route) {
+                            popUpTo(Screen.Login.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                ) {
+                    Text("Ahora no")
+                }
+            }
+        )
+    }
+
 }
 
 

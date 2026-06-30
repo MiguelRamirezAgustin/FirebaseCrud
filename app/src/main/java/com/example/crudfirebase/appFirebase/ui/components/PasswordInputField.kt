@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -39,33 +41,37 @@ import com.example.crudfirebase.ui.theme.color_write
 fun PasswordInputField(
     value: String,
     onValueChange: (String) -> Unit,
-    placeholder: String = "Enter your password",
+    placeholder: String = "Contraseña",
 ) {
 
-    var isFocused = remember { mutableStateOf(false) }
-    var isVisible = remember { mutableStateOf(false) }
+    val isFocused = remember { mutableStateOf(false) }
+    val isVisible = remember { mutableStateOf(false) }
 
     val borderColor = when {
-        isFocused.value -> color_black
-        else -> color_black
+        isFocused.value -> Color.White
+        else -> Color.White.copy(alpha = 0.35f)
     }
-
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(16.dp))
-            .background(color_write)
-            .padding(horizontal = 16.dp, vertical = 14.dp),
+            .height(56.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .background(Color.White.copy(alpha = 0.18f))
+            .border(
+                width = 1.dp,
+                color = borderColor,
+                shape = RoundedCornerShape(14.dp)
+            )
+            .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
         Icon(
             imageVector = Icons.Default.Lock,
-            contentDescription = "password icon",
-            tint = color_blue,
-            modifier = Modifier.size(24.dp)
+            contentDescription = null,
+            tint = Color.White.copy(alpha = .85f),
+            modifier = Modifier.size(22.dp)
         )
 
         Spacer(modifier = Modifier.width(12.dp))
@@ -83,37 +89,40 @@ fun PasswordInputField(
                     isFocused.value = it.isFocused
                 },
             singleLine = true,
+            cursorBrush = SolidColor(Color.White),
             textStyle = TextStyle(
-                color = Color.DarkGray,
-                textDecoration = TextDecoration.None,
+                color = Color.White,
                 fontSize = 16.sp
             ),
-            visualTransformation = if (isVisible.value) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
+            visualTransformation =
+                if (isVisible.value)
+                    VisualTransformation.None
+                else
+                    PasswordVisualTransformation(),
+
             decorationBox = { innerTextField ->
+
                 if (value.isEmpty()) {
                     Text(
                         text = placeholder,
-                        color = Color.Gray
+                        color = Color.White.copy(alpha = 0.55f),
+                        fontSize = 15.sp
                     )
                 }
+
                 innerTextField()
             }
         )
 
-
         Icon(
             painter = painterResource(
-                id = if (isVisible.value)
+                if (isVisible.value)
                     R.drawable.visibility
                 else
                     R.drawable.eye
             ),
-            contentDescription = "toggle password",
-            tint = Color.Gray,
+            contentDescription = null,
+            tint = Color.White.copy(alpha = .75f),
             modifier = Modifier
                 .size(22.dp)
                 .clickable {

@@ -16,4 +16,18 @@ val color_red = Color(0xFF2ECC71)
 val color_black = Color(0xFF858181)
 val color_blue_backgraund = Color(0xFF3ABBD3)
 
+val color_fondo_oscuro = Color(0xFF1E222B)
+val color_superficie_tarjeta = Color(0xFF282C37)
 
+val MenuFondoOscuro = Color(0xFF1E222B)
+val TarjetaFondoGris = Color(0xFF282C37)
+val ItemFondoGris = Color(0xFF242833)
+val TextoClaro = Color(0xFFE2E8F0)
+val TextoRojoCerrar = Color(0xFFE57373)
+
+val FondoPantallaVerde = Color(0xFF0C3D37)
+val FondoPantallaGris = Color(0xFF1E222B)
+val ColorTarjetaBase = Color(0xFF283B39)
+val ColorTextoGrisClaro = Color(0xFFCBD5E1)
+val ColorRojoFondoX = Color(0xFFFFFFFF)
+val ColorRojoIconoX = Color(0xFF991B1B)
