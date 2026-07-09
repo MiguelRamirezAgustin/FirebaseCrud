@@ -63,4 +63,27 @@ class OrderRepository @Inject constructor() {
                 Log.e("ORDER_REPOSITORY", it.message ?: "Error")
             }
     }
+
+
+
+    /**Add new status order*/
+    fun updateOrderStatus(
+        orderId: String,
+        status: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        firestore.collection("orders")
+            .document(orderId)
+            .update(
+                "status",
+                status
+            )
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener {
+                onError(it)
+            }
+    }
 }

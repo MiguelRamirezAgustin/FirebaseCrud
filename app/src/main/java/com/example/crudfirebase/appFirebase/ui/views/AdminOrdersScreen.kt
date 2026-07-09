@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.crudfirebase.appFirebase.ui.views.product.model.OrderModel
+import com.example.crudfirebase.appFirebase.ui.views.product.model.OrderStatus
 import com.example.crudfirebase.appFirebase.viewmodel.ProductOrderViewModel
 import com.example.crudfirebase.ui.theme.FondoBot
 import com.example.crudfirebase.ui.theme.FondoTop
@@ -101,7 +104,10 @@ fun AdminOrdersScreen(
             ) {
                 item { Spacer(modifier = Modifier.height(8.dp)) }
                 items(orders.value) { item ->
-                    showOrder(item)
+                    showOrder(
+                        item = item,
+                        viewModel = viewModel
+                    )
                 }
                 item { Spacer(modifier = Modifier.height(16.dp)) }
             }
@@ -110,10 +116,10 @@ fun AdminOrdersScreen(
 }
 
 @Composable
-fun showOrder(item: OrderModel) {
-    // Definición de colores basada en el sistema visual de la app
+fun showOrder( item: OrderModel,
+               viewModel: ProductOrderViewModel) {
     val colorVerdeNeon = Color(0xFF4ADE80)
-    val colorFondoTarjeta = Color(0xFF1E293B).copy(alpha = 0.85f) // Gris oscuro premium azulado
+    val colorFondoTarjeta = Color(0xFF1E293B).copy(alpha = 0.85f)
     val colorTextoSecundario = Color(0xFF94A3B8)
 
     Card(
@@ -145,10 +151,10 @@ fun showOrder(item: OrderModel) {
                 )
 
                 Text(
-                    text = item.status,
+                    text = buttonText(item.status),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
-                    color = colorVerdeNeon,
+                    color = statusColor(item.status),
                     modifier = Modifier
                         .background(
                             color = colorVerdeNeon.copy(alpha = 0.15f),
@@ -230,6 +236,69 @@ fun showOrder(item: OrderModel) {
                     color = colorVerdeNeon
                 )
             }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (item.status != OrderStatus.DELIVERED) {
+                Button(
+                    onClick = {
+                        viewModel.updateOrderStatus(
+                            orderId = item.orderId,
+                            status = nextStatus(item.status),
+                            onSuccess = {
+                                viewModel.getOrders()
+                            },
+                            onError = {
+                            }
+                        )
+
+                    },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp).height(40.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = statusColor(item.status),
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Text(
+                        buttonText(item.status),
+                        fontSize = 15.sp,
+                        color = Color.Black
+                    )
+                }
+            }
         }
     }
+}
+
+fun buttonText(status: String): String {
+    return when(status){
+        OrderStatus.PENDING -> "Preparar pedido"
+        OrderStatus.PROCESSING -> "Marcar como listo"
+        OrderStatus.READY -> "Entregar pedido"
+        OrderStatus.DELIVERED -> "Pedido entregado"
+        else -> ""
+    }
+}
+
+
+fun nextStatus(currentStatus: String): String {
+    return when(currentStatus){
+        OrderStatus.PENDING -> OrderStatus.PROCESSING
+        OrderStatus.PROCESSING -> OrderStatus.READY
+        OrderStatus.READY -> OrderStatus.DELIVERED
+        else -> currentStatus
+    }
+}
+
+
+fun statusColor(status: String): Color {
+    return when(status){
+        OrderStatus.PENDING -> Color(0xFFFF9800)
+        OrderStatus.PROCESSING -> Color(0xFF2196F3)
+        OrderStatus.READY -> Color(0xFF4CAF50)
+        OrderStatus.DELIVERED -> Color.Gray
+        OrderStatus.CANCELLED -> Color.Red
+        else -> Color.White
+    }
+
 }

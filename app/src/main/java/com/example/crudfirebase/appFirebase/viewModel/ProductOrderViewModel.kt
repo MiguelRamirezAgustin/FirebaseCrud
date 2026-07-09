@@ -35,4 +35,19 @@ class ProductOrderViewModel @Inject constructor(
         }
     }
 
+
+    /**pudate status order */
+    fun updateOrderStatus(
+        orderId: String,
+        status: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ){
+        repository.updateOrderStatus(
+            orderId = orderId,
+            status = status,
+            onSuccess = onSuccess,
+            onError = onError
+        )
+    }
 }

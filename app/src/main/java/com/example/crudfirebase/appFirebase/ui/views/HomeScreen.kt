@@ -26,12 +26,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
+
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
@@ -165,7 +166,7 @@ fun HomeScreen(navController: NavHostController,
 
                         DrawerItemCard(
                             title = "Pedidos",
-                            icon = Icons.Default.MailOutline
+                            icon = Icons.Default.Book
                         ) {
                             navController.navigate(Screen.AdminOrdersScreen.route)
                         }
@@ -364,6 +365,7 @@ fun DrawerItemCard(
                 .padding(18.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
 
             Icon(
                 imageVector = icon,
