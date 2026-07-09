@@ -41,24 +41,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.crudfirebase.appFirebase.ui.views.product.model.OrderModel
 import com.example.crudfirebase.appFirebase.ui.views.product.model.OrderStatus
 import com.example.crudfirebase.appFirebase.viewmodel.ProductOrderViewModel
 import com.example.crudfirebase.ui.theme.FondoBot
 import com.example.crudfirebase.ui.theme.FondoTop
 import com.example.crudfirebase.ui.theme.FondoTopProduct
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdminOrdersScreen(
-    navController: NavController,
-    viewModel: ProductOrderViewModel = hiltViewModel()
+fun OrderListClienScren( navController: NavController,
+                         viewModel: ProductOrderViewModel = hiltViewModel()
 ) {
+    val firebaseUser = FirebaseAuth.getInstance().currentUser
     val orders = viewModel.orders.collectAsState()
-
     LaunchedEffect(Unit) {
-        Log.d("ORDERS_SCREEN", "Pedidos: ${orders.value}")
-        viewModel.getOrders()
+        firebaseUser?.uid?.let {
+            viewModel.getOrdersByUser(it)
+        }
     }
 
     Scaffold(
@@ -66,7 +68,7 @@ fun AdminOrdersScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Lista de pedidos",
+                        text = "Mis pedidos",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -105,7 +107,7 @@ fun AdminOrdersScreen(
             ) {
                 item { Spacer(modifier = Modifier.height(8.dp)) }
                 items(orders.value) { item ->
-                    showOrderAdmin(
+                    showOrderclient(
                         item = item,
                         viewModel = viewModel
                     )
@@ -116,9 +118,10 @@ fun AdminOrdersScreen(
     }
 }
 
+
 @Composable
-fun showOrderAdmin( item: OrderModel,
-               viewModel: ProductOrderViewModel) {
+fun showOrderclient( item: OrderModel,
+                    viewModel: ProductOrderViewModel) {
     val colorVerdeNeon = Color(0xFF4ADE80)
     val colorFondoTarjeta = Color(0xFF1E293B).copy(alpha = 0.85f)
     val colorTextoSecundario = Color(0xFF94A3B8)
@@ -138,7 +141,6 @@ fun showOrderAdmin( item: OrderModel,
                 .fillMaxWidth()
                 .padding(16.dp),
         ) {
-            // Fila de Encabezado: Cliente y Estado del pedido
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -152,22 +154,13 @@ fun showOrderAdmin( item: OrderModel,
                 )
 
                 Text(
-                    text = if (item.status == OrderStatus.CANCELLED)
-                        "Pedido cancelado"
-                    else
-                        buttonText(item.status),
+                    text = item.status,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
-                    color = if (item.status == OrderStatus.CANCELLED)
-                        Color.White
-                    else
-                        statusColor(item.status),
+                    color = statusColor(item.status),
                     modifier = Modifier
                         .background(
-                            color = if (item.status == OrderStatus.CANCELLED)
-                                Color.Red
-                            else
-                                statusColor(item.status).copy(alpha = 0.15f),
+                            color = colorVerdeNeon.copy(alpha = 0.15f),
                             shape = RoundedCornerShape(8.dp)
                         )
                         .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -176,7 +169,7 @@ fun showOrderAdmin( item: OrderModel,
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Información de contacto secundaria
+
             Text(
                 text = "Tel: ${item.customerPhone}  •  ${item.customerEmail}",
                 fontSize = 13.sp,
@@ -187,7 +180,7 @@ fun showOrderAdmin( item: OrderModel,
             HorizontalDivider(color = Color.White.copy(alpha = 0.1f), thickness = 1.dp)
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Sección de productos
+
             Text(
                 text = "Productos",
                 fontWeight = FontWeight.SemiBold,
@@ -248,75 +241,62 @@ fun showOrderAdmin( item: OrderModel,
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            if ( item.status != OrderStatus.DELIVERED &&
-                item.status != OrderStatus.CANCELLED) {
+            if (item.status == OrderStatus.PENDING) {
+
                 Button(
                     onClick = {
+
                         viewModel.updateOrderStatus(
                             orderId = item.orderId,
-                            status = nextStatus(item.status),
+                            status = OrderStatus.CANCELLED,
                             onSuccess = {
-                                viewModel.getOrders()
+                                viewModel.getOrdersByUser(item.userId)
                             },
                             onError = {
+
                             }
                         )
 
                     },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp).height(40.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp)
+                        .height(45.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = statusColor(item.status),
-                        contentColor = Color.Black
+                        containerColor = Color.Red,
+                        contentColor = Color.White
                     )
                 ) {
                     Text(
-                        buttonText(item.status),
-                        fontSize = 15.sp,
-                        color = Color.Black
+                        text = "Cancelar pedido",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
                     )
                 }
-            }else if (item.status == OrderStatus.CANCELLED) {
+            } else {
                 Text(
-                    text = "Este pedido fue cancelado por el cliente.",
-                    color = Color.Red,
+                    text = when (item.status) {
+                        OrderStatus.PROCESSING ->
+                            "Tu pedido está siendo preparado."
+                        OrderStatus.READY ->
+                            "Tu pedido está listo."
+                        OrderStatus.DELIVERED ->
+                            "Tu pedido fue entregado."
+                        OrderStatus.CANCELLED ->
+                            "Este pedido fue cancelado."
+                        else -> ""
+                    },
+                    color = statusColor(item.status),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 12.dp)
+                    modifier = Modifier.padding(top = 10.dp)
                 )
+
             }
         }
     }
 }
 
-fun buttonText(status: String): String {
-    return when(status){
-        OrderStatus.PENDING -> "Preparar pedido"
-        OrderStatus.PROCESSING -> "Marcar como listo"
-        OrderStatus.READY -> "Entregar pedido"
-        OrderStatus.DELIVERED -> "Pedido entregado"
-        else -> ""
-    }
-}
 
 
-fun nextStatus(currentStatus: String): String {
-    return when(currentStatus){
-        OrderStatus.PENDING -> OrderStatus.PROCESSING
-        OrderStatus.PROCESSING -> OrderStatus.READY
-        OrderStatus.READY -> OrderStatus.DELIVERED
-        else -> currentStatus
-    }
-}
 
-
-fun statusColor(status: String): Color {
-    return when(status){
-        OrderStatus.PENDING -> Color(0xFFFF9800)
-        OrderStatus.PROCESSING -> Color(0xFF2196F3)
-        OrderStatus.READY -> Color(0xFF4CAF50)
-        OrderStatus.DELIVERED -> Color.Gray
-        OrderStatus.CANCELLED -> Color.Red
-        else -> Color.White
-    }
-
-}

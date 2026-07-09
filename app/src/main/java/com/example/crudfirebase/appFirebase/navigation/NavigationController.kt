@@ -11,6 +11,7 @@ import com.example.crudfirebase.appFirebase.ui.views.EditProfileUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.HomeScreen
 import com.example.crudfirebase.appFirebase.ui.views.ListUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.LoginUserScreen
+import com.example.crudfirebase.appFirebase.ui.views.OrderListClienScren
 import com.example.crudfirebase.appFirebase.ui.views.ProfileUserScreenInfo
 import com.example.crudfirebase.appFirebase.ui.views.RegisterUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.ShoppingScreen
@@ -72,6 +73,9 @@ fun NavigationController() {
         }
         composable(Screen.AdminOrdersScreen.route) {
             AdminOrdersScreen(navController = navController)
+        }
+        composable(Screen.OrderListClienScren.route) {
+            OrderListClienScren(navController = navController)
         }
 
 

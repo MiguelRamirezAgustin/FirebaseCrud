@@ -50,4 +50,11 @@ class ProductOrderViewModel @Inject constructor(
             onError = onError
         )
     }
+
+    /**get order cliente*/
+    fun getOrdersByUser(userId: String) {
+        repository.getOrdersByUser(userId) { list ->
+            _orders.value = list
+        }
+    }
 }

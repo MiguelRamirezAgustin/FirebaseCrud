@@ -27,6 +27,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -75,7 +76,7 @@ fun ShoppingScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Text(
                         "Confirmar Pedido",
@@ -106,7 +107,7 @@ fun ShoppingScreen(
         bottomBar = {
 
             Card(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFF212B36)
                 )
@@ -136,9 +137,7 @@ fun ShoppingScreen(
 
                 Button(
                     onClick = {
-
                         val productsOrder = cart.value.map {
-
                             OrderProduct(
                                 productId = it.product.id,
                                 productName = it.product.name,
@@ -199,6 +198,7 @@ fun ShoppingScreen(
                         color = Color.Black
                     )
                 }
+                Spacer(Modifier.height(25.dp))
             }
         },
         containerColor = Color(0xFF14343B)

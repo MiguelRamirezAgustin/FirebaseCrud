@@ -12,6 +12,7 @@ sealed class Screen(val route:String) {
     object AddProductScreen : Screen("AddProductScreen")
     object ShoppingScreen : Screen("ShoppingScreen")
     object AdminOrdersScreen : Screen("AdminOrdersScreen")
+    object OrderListClienScren : Screen("OrderListClienScren")
 
 
 }

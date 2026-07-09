@@ -8,6 +8,7 @@ import com.google.firebase.firestore.Query
 import javax.inject.Inject
 
 
+
 class OrderRepository @Inject constructor() {
 
     private val firestore = FirebaseFirestore.getInstance()
@@ -48,20 +49,23 @@ class OrderRepository @Inject constructor() {
     fun getOrders(
         result: (List<OrderModel>) -> Unit
     ) {
+
         firestore.collection("orders")
-            .get()
-            .addOnSuccessListener { snapshot ->
-                val orders =
-                    snapshot.documents.mapNotNull { document ->
-                        document.toObject(
-                            OrderModel::class.java
-                        )
-                    }
+            .orderBy("date", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, error ->
+
+                if (error != null) {
+                    Log.e("ORDER_REPOSITORY", error.message ?: "Error")
+                    return@addSnapshotListener
+                }
+
+                val orders = snapshot?.documents?.mapNotNull {
+                    it.toObject(OrderModel::class.java)
+                }.orEmpty()
+
                 result(orders)
             }
-            .addOnFailureListener {
-                Log.e("ORDER_REPOSITORY", it.message ?: "Error")
-            }
+
     }
 
 
@@ -84,6 +88,29 @@ class OrderRepository @Inject constructor() {
             }
             .addOnFailureListener {
                 onError(it)
+            }
+    }
+
+
+    /**Get order cliente*/
+    fun getOrdersByUser(
+        userId: String,
+        result: (List<OrderModel>) -> Unit
+    ) {
+        firestore.collection("orders")
+            .whereEqualTo("userId", userId)
+            .addSnapshotListener { snapshot, error ->
+
+                if (error != null) {
+                    Log.e("ORDER_REPOSITORY", error.message ?: "Error")
+                    return@addSnapshotListener
+                }
+
+                val orders = snapshot?.documents?.mapNotNull {
+                    it.toObject(OrderModel::class.java)
+                }.orEmpty()
+
+                result(orders)
             }
     }
 }

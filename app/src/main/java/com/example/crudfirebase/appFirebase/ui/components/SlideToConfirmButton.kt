@@ -80,8 +80,8 @@ fun SlideToConfirmButton(
         }
     }
 
-    val backgroundColor = if (enabled) color_blue else Color.White
-    val borderColor = if (enabled) Color.Transparent else color_blue
+    val backgroundColor = if (enabled)  Color(0xFF0E6A63) else Color.White
+    val borderColor = if (enabled) Color.Transparent else  Color(0xFF0E6A63)
     val textColor = if (enabled) Color.White else Color.Black
 
     Box(

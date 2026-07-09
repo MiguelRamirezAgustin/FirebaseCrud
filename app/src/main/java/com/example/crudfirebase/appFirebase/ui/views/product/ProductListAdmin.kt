@@ -2,6 +2,7 @@ package com.example.crudfirebase.appFirebase.ui.views.product
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -75,7 +77,7 @@ fun ProductListAdmin(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = "     Lista de productos ",
@@ -105,9 +107,20 @@ fun ProductListAdmin(
             FloatingActionButton(
                 onClick = {
                     navController.navigate(Screen.AddProductScreen.route)
-                }
+                },
+                containerColor = Color(0xFF1E293B),
+                contentColor = Color.White,
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.border(
+                    width = 2.dp,
+                    color = Color(0xFF4ADE80),
+                    shape = RoundedCornerShape(16.dp)
+                )
             ) {
-                Icon(Icons.Default.Add, contentDescription = null)
+                Icon(Icons.Default.Add, contentDescription = null,
+                    modifier = Modifier,
+                    tint = Color.White
+                )
             }
         }
     ) { padding ->
@@ -209,9 +222,8 @@ fun ProductItem(
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color(0xFF94A3B8),
-                maxLines = 2,
+                maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.height(36.dp)
             )
 
             Spacer(modifier = Modifier.height(5.dp))

@@ -29,10 +29,13 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.FormatListNumberedRtl
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
-
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.Person4
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
@@ -129,11 +132,12 @@ fun HomeScreen(navController: NavHostController,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Image(
-                        painter = painterResource(R.drawable.iconfirebase),
+                        painter = painterResource(R.drawable.burgericon),
                         contentDescription = null,
                         modifier = Modifier
                             .size(80.dp)
@@ -161,6 +165,7 @@ fun HomeScreen(navController: NavHostController,
                         navController.navigate(Screen.EditProfileUserScreen.route)
                     }
 
+
                     if (userLogin.value?.admin == true) {
 
 
@@ -179,7 +184,7 @@ fun HomeScreen(navController: NavHostController,
                         }
 
                         DrawerItemCard(
-                            title = "Registrar artículo",
+                            title = "Registrar orden",
                             icon = Icons.Default.Add
                         ) {
                             navController.navigate(Screen.AddProductScreen.route)
@@ -192,7 +197,12 @@ fun HomeScreen(navController: NavHostController,
                             navController.navigate(Screen.ListUserScreen.route)
                         }
                     }
-
+                    DrawerItemCard(
+                        title = "Mis pedidos",
+                        icon = Icons.Default.FormatListNumberedRtl
+                    ) {
+                        navController.navigate(Screen.OrderListClienScren.route)
+                    }
                     DrawerItemCard(
                         title = "Cerrar sesión",
                         icon = Icons.Default.ExitToApp,
@@ -327,7 +337,7 @@ fun CardUser(
         ) {
 
             Icon(
-                imageVector = Icons.Default.AccountCircle,
+                imageVector = Icons.Default.Person4,
                 contentDescription = null,
                 modifier = Modifier.size(90.dp)
             )
