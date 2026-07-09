@@ -10,6 +10,7 @@ import com.example.crudfirebase.appFirebase.ui.views.ListUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.LoginUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.ProfileUserScreenInfo
 import com.example.crudfirebase.appFirebase.ui.views.RegisterUserScreen
+import com.example.crudfirebase.appFirebase.ui.views.ShoppingScreen
 import com.example.crudfirebase.appFirebase.ui.views.SplashScreen
 import com.example.crudfirebase.appFirebase.ui.views.product.AddProductScreen
 import com.example.crudfirebase.appFirebase.ui.views.product.ProductListAdmin
@@ -52,6 +53,10 @@ fun NavigationController() {
         composable(Screen.AddProductScreen.route) {
             AddProductScreen(navController)
         }
+        composable(Screen.ShoppingScreen.route) {
+            ShoppingScreen(navController)
+        }
+
 
     }
 }

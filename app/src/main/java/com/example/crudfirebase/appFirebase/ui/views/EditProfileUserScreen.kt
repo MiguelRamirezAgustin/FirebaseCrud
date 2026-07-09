@@ -47,16 +47,13 @@ import com.example.crudfirebase.appFirebase.data.model.UserModel
 import com.example.crudfirebase.appFirebase.ui.components.EmailInputField
 import com.example.crudfirebase.appFirebase.ui.components.GenericInputField
 import com.example.crudfirebase.appFirebase.ui.components.InputFieldGeneric
-import com.example.crudfirebase.appFirebase.ui.components.PasswordInputField
 import com.example.crudfirebase.appFirebase.ui.components.SlideToConfirmButton
 import com.example.crudfirebase.appFirebase.viewmodel.AuthViewModel
 import com.example.crudfirebase.appFirebase.viewmodel.UiState
-import com.example.crudfirebase.ui.theme.color_black
 import com.example.crudfirebase.ui.theme.color_fondo_oscuro
 import com.example.crudfirebase.ui.theme.color_write
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date

@@ -6,5 +6,6 @@ data class ProductModel (
     val description: String = "",
     val price: Double = 0.0,
     val imageUrl: String = "",
-    val available: Boolean = true
+    val createdBy: String = "",
+    val createdAt: Long = System.currentTimeMillis()
 )

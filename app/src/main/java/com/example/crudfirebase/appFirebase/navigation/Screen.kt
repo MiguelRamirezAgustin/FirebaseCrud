@@ -10,6 +10,7 @@ sealed class Screen(val route:String) {
     object ListUserScreen : Screen("ListUserScreen")
     object ProductListAdmin : Screen("ProductListAdmin")
     object AddProductScreen : Screen("AddProductScreen")
+    object ShoppingScreen : Screen("ShoppingScreen")
 
 
 }

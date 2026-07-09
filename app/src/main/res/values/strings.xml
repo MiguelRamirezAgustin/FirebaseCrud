@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CrudFirebase</string>
+    <string name="app_name">Hamburgers</string>
     <string name="btn_login">Login</string>
     <string name="text_register_user">¿Aún no te gas registrado?</string>
     <string name="text_register">Registro</string>
