@@ -12,6 +12,7 @@ class CartViewModel : ViewModel() {
     private val _cart = MutableStateFlow<List<CartItemSelect>>(emptyList())
     val cart = _cart.asStateFlow()
 
+
     fun addProduct(product: ProductModel) {
 
         val list = _cart.value.toMutableList()
@@ -21,33 +22,65 @@ class CartViewModel : ViewModel() {
         }
 
         if (index >= 0) {
+
             val item = list[index]
+
             list[index] = item.copy(
                 quantity = item.quantity + 1
             )
+
         } else {
-            list.add(CartItemSelect(product))
+
+            list.add(
+                CartItemSelect(product)
+            )
+
         }
 
         _cart.value = list
-
-        Log.d("CARRITO", "Productos: ${_cart.value.size}")
     }
+
 
     fun removeProduct(product: ProductModel) {
-        _cart.value = _cart.value.filter {
-            it.product.id != product.id
+
+        val list = _cart.value.toMutableList()
+
+        val index = list.indexOfFirst {
+            it.product.id == product.id
         }
+
+
+        if(index >= 0){
+
+            val item = list[index]
+
+            if(item.quantity > 1){
+
+                list[index] = item.copy(
+                    quantity = item.quantity - 1
+                )
+
+            }else{
+
+                list.removeAt(index)
+
+            }
+        }
+
+        _cart.value = list
     }
 
-    fun clear() {
-        _cart.value = emptyList()
-    }
 
     fun total(): Double {
+
         return _cart.value.sumOf {
             it.product.price * it.quantity
         }
+
     }
 
+
+    fun clear(){
+        _cart.value = emptyList()
+    }
 }

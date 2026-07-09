@@ -28,11 +28,13 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -79,7 +81,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(navController: NavHostController,
                viewModel: ProductViewModel = viewModel(),
-               cartViewModel: CartViewModel = viewModel()) {
+               cartViewModel: CartViewModel) {
 
     val uid = FirebaseAuth
         .getInstance()
@@ -160,6 +162,14 @@ fun HomeScreen(navController: NavHostController,
 
                     if (userLogin.value?.admin == true) {
 
+
+                        DrawerItemCard(
+                            title = "Pedidos",
+                            icon = Icons.Default.MailOutline
+                        ) {
+                            navController.navigate(Screen.AdminOrdersScreen.route)
+                        }
+
                         DrawerItemCard(
                             title = "Mis productos",
                             icon = Icons.Default.ShoppingCart
@@ -229,7 +239,10 @@ fun HomeScreen(navController: NavHostController,
 
                         IconButton(
                             onClick = {
-                                navController.navigate(Screen.ShoppingScreen.route)
+                                val name = userLogin.value?.name
+                                val mail = userLogin.value?.email
+                                val phone = userLogin.value?.phone
+                                navController.navigate(Screen.ShoppingScreen.route +"/$name/$mail/$phone")
                             }
                         ) {
 
@@ -300,7 +313,7 @@ fun CardUser(
     user: UserModel?
 ) {
 
-    androidx.compose.material3.Card(
+   Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -337,7 +350,7 @@ fun DrawerItemCard(
     onClick: () -> Unit
 ) {
 
-    androidx.compose.material3.Card(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp)

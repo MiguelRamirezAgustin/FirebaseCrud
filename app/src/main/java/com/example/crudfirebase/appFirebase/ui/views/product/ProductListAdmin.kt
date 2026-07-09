@@ -161,9 +161,9 @@ fun ProductItem(
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF282C37).copy(alpha = 0.6f) // Fondo oscuro translúcido coherente
+            containerColor = Color(0xFF282C37).copy(alpha = 0.6f)
         ),
-        shape = RoundedCornerShape(16.dp), // Esquinas redondeadas suaves
+        shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
         )
@@ -191,13 +191,13 @@ fun ProductItem(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Nombre del producto destacado en blanco audaz
+
             Text(
                 text = product.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 color = color_write,
-                maxLines = 1,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
 
@@ -243,7 +243,7 @@ fun ProductItem(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Text("Agregar al carrito")
+                Text("Agregar")
             }
         }
         if (showDelete && onDeleteClick != null) {

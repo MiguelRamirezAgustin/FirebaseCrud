@@ -1,9 +1,12 @@
 package com.example.crudfirebase.appFirebase.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.crudfirebase.appFirebase.ui.viewModelShopping.CartViewModel
+import com.example.crudfirebase.appFirebase.ui.views.AdminOrdersScreen
 import com.example.crudfirebase.appFirebase.ui.views.EditProfileUserScreen
 import com.example.crudfirebase.appFirebase.ui.views.HomeScreen
 import com.example.crudfirebase.appFirebase.ui.views.ListUserScreen
@@ -21,6 +24,7 @@ import com.example.crudfirebase.appFirebase.ui.views.product.ProductListAdmin
 fun NavigationController() {
 
     val navController = rememberNavController()
+    val cartViewModel: CartViewModel = viewModel()
 
     NavHost(
     navController = navController,
@@ -36,7 +40,10 @@ fun NavigationController() {
             RegisterUserScreen(navController)
         }
         composable(Screen.HomeScreen.route) {
-            HomeScreen(navController)
+            HomeScreen(
+                navController = navController,
+                cartViewModel = cartViewModel
+            )
         }
         composable(Screen.EditProfileUserScreen.route) {
             EditProfileUserScreen(navController)
@@ -53,9 +60,20 @@ fun NavigationController() {
         composable(Screen.AddProductScreen.route) {
             AddProductScreen(navController)
         }
-        composable(Screen.ShoppingScreen.route) {
-            ShoppingScreen(navController)
+        composable(Screen.ShoppingScreen.route+ "/{name}/{phone}/{email}") {
+            ShoppingScreen(
+                navController = navController,
+                cartViewModel = cartViewModel,
+
+                it.arguments?.getString("name"),
+                it.arguments?.getString("phone"),
+                it.arguments?.getString("email"),
+            )
         }
+        composable(Screen.AdminOrdersScreen.route) {
+            AdminOrdersScreen(navController = navController)
+        }
+
 
 
     }
