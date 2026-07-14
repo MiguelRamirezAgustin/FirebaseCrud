@@ -71,7 +71,6 @@ fun AddProductScreen(
     var description = remember { mutableStateOf("") }
     var price = remember { mutableStateOf("") }
 
-    // PALETA DE COLORES DE LA APP
 
     var imageUri = remember {
         mutableStateOf<Uri?>(null)
@@ -97,7 +96,7 @@ fun AddProductScreen(
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            text = "Registrar orden",
+                            text = "Registrar producto",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 20.sp,
                             color = Color.White,

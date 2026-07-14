@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.crudfirebase.R
 import com.example.crudfirebase.appFirebase.navigation.Screen
-import com.example.crudfirebase.ui.theme.color_blue
 import com.example.crudfirebase.ui.theme.color_write
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -79,7 +77,7 @@ fun SplashScreen(navController: NavController) {
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.iconfirebase),
+                    painter = painterResource(R.drawable.burgericon),
                     contentDescription = "firebase icon",
                     modifier = Modifier.size(120.dp),
                     tint = Color.Unspecified

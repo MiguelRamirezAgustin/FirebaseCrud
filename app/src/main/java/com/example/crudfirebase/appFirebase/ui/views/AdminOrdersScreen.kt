@@ -138,7 +138,6 @@ fun showOrderAdmin( item: OrderModel,
                 .fillMaxWidth()
                 .padding(16.dp),
         ) {
-            // Fila de Encabezado: Cliente y Estado del pedido
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -176,7 +175,6 @@ fun showOrderAdmin( item: OrderModel,
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Información de contacto secundaria
             Text(
                 text = "Tel: ${item.customerPhone}  •  ${item.customerEmail}",
                 fontSize = 13.sp,
@@ -187,7 +185,6 @@ fun showOrderAdmin( item: OrderModel,
             HorizontalDivider(color = Color.White.copy(alpha = 0.1f), thickness = 1.dp)
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Sección de productos
             Text(
                 text = "Productos",
                 fontWeight = FontWeight.SemiBold,

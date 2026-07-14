@@ -155,7 +155,7 @@ fun HomeScreen(navController: NavHostController,
                         title = "Ver perfil",
                         icon = Icons.Default.Person
                     ) {
-                        navController.navigate(Screen.ProfileUserScreenInfo.route)
+                        navController.navigate(Screen.ProfileUserScreeInfo.route)
                     }
 
                     DrawerItemCard(
@@ -184,14 +184,14 @@ fun HomeScreen(navController: NavHostController,
                         }
 
                         DrawerItemCard(
-                            title = "Registrar orden",
+                            title = "Registrar Producto",
                             icon = Icons.Default.Add
                         ) {
                             navController.navigate(Screen.AddProductScreen.route)
                         }
 
                         DrawerItemCard(
-                            title = "Administrar cuenta",
+                            title = "Administrar usuarios",
                             icon = Icons.Default.AccountCircle
                         ) {
                             navController.navigate(Screen.ListUserScreen.route)
@@ -253,7 +253,7 @@ fun HomeScreen(navController: NavHostController,
                                 val name = userLogin.value?.name
                                 val mail = userLogin.value?.email
                                 val phone = userLogin.value?.phone
-                                navController.navigate(Screen.ShoppingScreen.route +"/$name/$mail/$phone")
+                                navController.navigate(Screen.ShoppingScreen.route +"/$name/$phone/$mail ")
                             }
                         ) {
 

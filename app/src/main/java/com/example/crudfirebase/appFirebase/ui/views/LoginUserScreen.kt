@@ -204,7 +204,7 @@ fun LoginUserScreen(navController: NavHostController) {
                     ) {
 
                         Icon(
-                            painter = painterResource(R.drawable.iconfirebase),
+                            painter = painterResource(R.drawable.burgericon),
                             contentDescription = null,
                             modifier = Modifier.size(55.dp),
                             tint = Color.Unspecified

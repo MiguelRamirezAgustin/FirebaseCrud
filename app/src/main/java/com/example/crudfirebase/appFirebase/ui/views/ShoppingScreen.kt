@@ -43,11 +43,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.crudfirebase.R
 
 import com.example.crudfirebase.appFirebase.ui.viewModelShopping.CartViewModel
 import com.example.crudfirebase.appFirebase.ui.views.product.model.OrderModel
@@ -79,7 +81,7 @@ fun ShoppingScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        "Confirmar Pedido",
+                        text = stringResource(id = R.string.confirm_Order),
                         color = Color.White
                     )
                 },
@@ -121,7 +123,7 @@ fun ShoppingScreen(
                 ) {
 
                     Text(
-                        "Total a pagar",
+                        text = stringResource(id = R.string.total_to_Pay),
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
@@ -194,7 +196,7 @@ fun ShoppingScreen(
                 ) {
 
                     Text(
-                        "Realizar pedido",
+                        text = stringResource(id = R.string.place_Order),
                         color = Color.Black
                     )
                 }
@@ -215,7 +217,7 @@ fun ShoppingScreen(
         ) {
 
             Text(
-                text = "Resumen de tu Compra",
+                text = stringResource(id = R.string.purchase_Summary),
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,

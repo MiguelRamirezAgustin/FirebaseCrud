@@ -13,4 +13,13 @@
     <string name="text_birthdate">Fecha de nacimiento</string>
     <string name="text_update">Actualizar</string>
     <string name="text_save">Guardar</string>
+
+    <string name="confirm_Order">Confirmar Pedido</string>
+    <string name="total_to_Pay">Total a pagar</string>
+    <string name="place_Order">Realizar pedido></string>
+    <string name="purchase_Summary">Resumen de tu Compra</string>
+
+    <string name="manage_Contacts">Gestionar Contactos</string>
+    <string name="title_Product">Productos</string>
+    <string name="cancel_Order">Cancelar pedido"</string>
 </resources>

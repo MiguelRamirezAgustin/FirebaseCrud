@@ -36,12 +36,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.crudfirebase.R
 import com.example.crudfirebase.appFirebase.ui.views.product.model.OrderModel
 import com.example.crudfirebase.appFirebase.ui.views.product.model.OrderStatus
 import com.example.crudfirebase.appFirebase.viewmodel.ProductOrderViewModel
@@ -182,7 +184,7 @@ fun showOrderclient( item: OrderModel,
 
 
             Text(
-                text = "Productos",
+                text = stringResource(id = R.string.title_Product),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 14.sp,
                 color = colorTextoSecundario
@@ -220,14 +222,13 @@ fun showOrderclient( item: OrderModel,
             HorizontalDivider(color = Color.White.copy(alpha = 0.1f), thickness = 1.dp)
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Fila de Cierre con el Monto Total de Pago
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Total a Pagar",
+                    text = stringResource(id = R.string.total_to_Pay),
                     fontWeight = FontWeight.Medium,
                     fontSize = 15.sp,
                     color = Color.White
@@ -269,7 +270,7 @@ fun showOrderclient( item: OrderModel,
                     )
                 ) {
                     Text(
-                        text = "Cancelar pedido",
+                        text = stringResource(id = R.string.cancel_Order),
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )

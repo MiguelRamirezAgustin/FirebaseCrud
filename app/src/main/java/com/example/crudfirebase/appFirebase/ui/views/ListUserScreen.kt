@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
@@ -88,7 +89,7 @@ fun ListUserScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Gestionar Contactos",
+                        text =  stringResource(id = com.example.crudfirebase.R.string.manage_Contacts),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 20.sp,
                         color = Color.White
